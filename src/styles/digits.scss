@@ -1,0 +1,99 @@
+// @use 'custom-properties';
+
+// begin digit styles
+svg {
+    width: 100%;
+    height: 100%;
+    .arm {
+        fill: var(--inactive-color);
+    }
+    &.num-1 {
+        .arm {
+            &#arm2 {
+                fill: var(--active-color);
+            }
+            &#arm3 {
+                fill: var(--active-color);
+            }
+        }
+    }
+    &.num-2 {
+        .arm {
+            fill: var(--active-color);
+            &#arm3,
+            &#arm6 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+    &.num-3 {
+        .arm {
+            fill: var(--active-color);
+            &#arm6,
+            &#arm5 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+    &.num-4 {
+        .arm {
+            fill: var(--active-color);
+            &#arm1,
+            &#arm4,
+            &#arm5 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+    &.num-5 {
+        .arm {
+            fill: var(--active-color);
+            &#arm2,
+            &#arm5 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+    &.num-6 {
+        .arm {
+            fill: var(--active-color);
+            &#arm2 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+    &.num-7 {
+        .arm {
+            &#arm1,
+            &#arm2,
+            &#arm3 {
+                fill: var(--active-color);
+            }
+        }
+    }
+
+    &.num-8 {
+        .arm {
+            fill: var(--active-color);
+        }
+    }
+
+    &.num-9 {
+        .arm {
+            fill: var(--active-color);
+
+            &#arm5 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+
+    &.num-0 {
+        .arm {
+            fill: var(--active-color);
+            &#arm7 {
+                fill: var(--inactive-color);
+            }
+        }
+    }
+}

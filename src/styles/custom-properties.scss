@@ -1,0 +1,25 @@
+:root {
+    // main container grid
+    --grid-gutter: var(
+        --space-s-l,
+        clamp(1.13rem, calc(-9.87rem + 55vw), 2.5rem)
+    );
+
+    // colors
+    --bg-color: #0f191f;
+    // --bg-color: red;
+    --inactive-color: #262626;
+    --active-color: rgb(201, 209, 217);
+
+    // sizes
+    --clock-face-width: 50rem;
+    --letter-width-multiplier: 0.5;
+    --am-pm-letters-width: calc(100% * var(--letter-width-multiplier));
+    --spacing: clamp(2.25rem, calc(1.29rem + 4.78vw), 5rem);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+}

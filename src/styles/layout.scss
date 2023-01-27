@@ -1,0 +1,100 @@
+// @use 'custom-properties';
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    // font-family: 'PT Sans', sans-serif;
+    font-family: 'Bungee', cursive;
+}
+
+body {
+    background: var(--bg-color);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    margin-inline: auto;
+}
+
+.clock-container {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr;
+    justify-content: center;
+    grid-template-areas:
+        'antePost clock-face'
+        'antePost clock-meta';
+    gap: 33% 0%;
+}
+
+.clock-face {
+    grid-area: clock-face;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr;
+    display: flex;
+    flex-direction: row;
+    max-width: var(--clock-face-width);
+    gap: 10%;
+    align-self: start;
+    section {
+        position: relative;
+        display: flex;
+        &:not(:last-of-type):after {
+            content: '';
+            width: clamp(0.8rem, 1vw, 1vw);
+            height: clamp(0.8rem, 1vw, 1vw);
+            background: var(--active-color);
+            position: absolute;
+            right: -1.2vw;
+            bottom: 0;
+            border-radius: 1rem;
+        }
+    }
+}
+
+.clock-meta-container {
+    grid-area: clock-meta;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: var(--grid-gutter);
+    section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        svg {
+            display: block;
+            max-width: calc(var(--clock-face-width) / 15);
+        }
+        .meta-title {
+            grid-column-start: 1;
+            grid-column-end: 4;
+            color: #c9d1d9;
+            font-size: clamp(2rem, 2vw, 3rem);
+            text-align: center;
+            margin-top: 35%;
+        }
+    }
+}
+
+.am-pm {
+    grid-area: antePost;
+    display: flex;
+    flex-direction: column;
+    max-width: 150px;
+    align-self: start;
+    svg {
+        display: block;
+        fill: var(--inactive-color);
+        max-width: var(--am-pm-letters-width);
+        height: auto;
+        margin-bottom: 1rem;
+        &.its-pm,
+        &.its-am {
+            fill: var(--active-color);
+        }
+    }
+}
