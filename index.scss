@@ -1,3 +1,5 @@
-@use "./src/styles/custom-properties.scss";
-@use "./src/styles/layout.scss";
-@use "./src/styles/digits.scss";
+@use './src/weatherIconFont/weather-icons.scss';
+@use './src/styles/custom-properties.scss';
+@use './src/styles/layout.scss';
+@use './src/styles/digits.scss';
+@use './src/styles/weather.scss';
