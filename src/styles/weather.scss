@@ -1,13 +1,96 @@
-.weather-container {
+.weather {
+    position: relative;
     color: var(--active-color);
-    padding: 3rem;
-    margin: 3rem;
+    // padding: 3rem;
+    margin: 6rem;
+    display: flex;
+    flex-direction: column;
+    // gap: 0.5rem;
+    text-align: center;
+    opacity: 0;
+
+    &.show {
+        transition: opacity 0.7s ease-in-out;
+        opacity: 1;
+    }
     .icon,
     .temp {
         display: flex;
         justify-content: center;
     }
+    .location-title {
+        font-size: 2.4rem;
+        font-weight: 400;
+    }
     .icon {
-        font-size: 5rem;
+        position: absolute;
+        top: 4rem;
+        right: 1rem;
+        font-size: 1rem;
+
+        // margin: 0.5rem;
+    }
+    .temp {
+        position: relative;
+        font-size: 4.5rem;
+        font-weight: 200;
+        i {
+            position: absolute;
+            left: 0;
+            font-size: 2.3rem;
+            // margin-right: 0.3rem;
+            margin-top: 1.4rem;
+        }
+    }
+    .description {
+        font-size: 2rem;
+        font-weight: 400;
+        text-transform: capitalize;
+    }
+}
+.lds-ring {
+    height: 212px;
+    display: block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+    margin: 0 auto;
+    margin-top: 8rem;
+    &.hidden {
+        transition: opacity 1s ease-in-out;
+        margin: 0 auto;
+        opacity: 0;
+        display: none;
+    }
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

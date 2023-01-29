@@ -4,9 +4,9 @@ import './index.scss';
 import clockView from './clockView.js';
 import { getWeather, renderWeather } from './src/js/weather.js';
 
-const weatherData = await getWeather();
-console.log(weatherData);
-renderWeather(weatherData);
+// const weatherData = await getWeather();
+// console.log(weatherData);
+// renderWeather(weatherData);
 
 const target = document.querySelector('.clock-container');
 const hourEl = document.querySelector('.hour');
@@ -136,5 +136,7 @@ clockView.start({
     // activeColor: 'purple',
     // inactiveColor: 'green',
 });
-
+const weatherData = await getWeather();
+console.log(weatherData);
+renderWeather(weatherData);
 // setInterval(setCurrentTime, 1000);
