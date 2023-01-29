@@ -164,7 +164,7 @@ class ClockView {
     }
 
     stop() {
-        clearInterval(this.time);
+        clearInterval(this.timeInterval);
     }
 
     #setAntePost(timeObj) {
