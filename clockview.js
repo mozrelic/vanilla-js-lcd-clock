@@ -2,19 +2,22 @@
 //
 // NOTES:
 //
-import markup from './src/js/markup.js';
 
-class ClockView {
+import { ClockClassTemplate } from './src/js/clockClassTemplate.js';
+import markup from './src/js/markup.js';
+import time from './src/js/time.js';
+
+class ClockView extends ClockClassTemplate {
     timeInterval;
     target;
     options;
-    defaultOptions = {
-        target: '.clock-container',
-        activeColor: 'undefined',
-        inactiveColor: 'undefined',
-        clockMeta: true,
-        hour12: false,
-    };
+    // defaultOptions = {
+    //     target: '.clock-container',
+    //     activeColor: 'undefined',
+    //     inactiveColor: 'undefined',
+    //     clockMeta: true,
+    //     hour12: false,
+    // };
 
     #setOptions(options) {
         this.options = { ...options };
@@ -51,62 +54,6 @@ class ClockView {
                 `${activeColor}`
             );
         }
-    }
-
-    #getTime() {
-        const rawTime = new Date();
-
-        const hour12 =
-            this.options.hour12 === true
-                ? this.options.hour12
-                : this.defaultOptions.hour12;
-
-        const formatter = new Intl.DateTimeFormat('en-us', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            hour12: hour12,
-        });
-
-        const filteredTime = formatter
-            .formatToParts(rawTime)
-            .filter((row) => row['type'] !== 'literal');
-
-        // this takes the filtered time object and gets the last two digits from each value string, so i can then save them into a new
-        // object with a specific key name. I have done it this way so I can use the final key value as a template literal to render
-        // the correct css class
-        const tempTimeObj = {};
-        filteredTime.forEach(function(item) {
-            let tempTimeValue = item['value']
-                .padStart(2, '0')
-                .split('')
-                .slice(-2);
-
-            tempTimeValue.forEach((value, i) => {
-                tempTimeObj[`${item['type']}${i + 1}`] = value;
-            });
-        });
-
-        const timeObj = {
-            ye1: tempTimeObj.year1,
-            ye2: tempTimeObj.year2,
-            mo1: tempTimeObj.month1,
-            mo2: tempTimeObj.month2,
-            da1: tempTimeObj.day1,
-            da2: tempTimeObj.day2,
-            hh1: tempTimeObj.hour1,
-            hh2: tempTimeObj.hour2,
-            mm1: tempTimeObj.minute1,
-            mm2: tempTimeObj.minute2,
-            ss1: tempTimeObj.second1,
-            ss2: tempTimeObj.second2,
-            antePost:
-                `${tempTimeObj.dayPeriod1}${tempTimeObj.dayPeriod2}`.toLowerCase(),
-        };
-        return timeObj;
     }
 
     #setMeta(timeObj) {
@@ -147,7 +94,7 @@ class ClockView {
     }
 
     #updateTime() {
-        const timeObj = this.#getTime();
+        const timeObj = time.getTime(this.options);
         this.#setAntePost(timeObj);
         this.#setTime(timeObj);
         if (this.options.clockMeta === false) return;
