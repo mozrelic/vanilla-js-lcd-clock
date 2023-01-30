@@ -1,4 +1,4 @@
-import { ClockClassTemplate } from './clockClassTemplate.js';
+import { ClockClassTemplate } from './ClockClassTemplate';
 
 class Time extends ClockClassTemplate {
   getTime(options) {

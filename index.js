@@ -1,8 +1,8 @@
 ('use strict');
 
 import './index.scss';
-import clockView from './clockView.js';
-import { getWeather, renderWeather } from './src/js/weather.js';
+import clockView from './src/js/ClockView';
+import { getWeather, renderWeather } from './src/js/WeatherView';
 
 clockView.start({
     // target: '.clock-container',

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ClockClassTemplate } from './ClockClassTemplate';
 
 const zipCode = '97756';
 const apiKey = 'ef9f7861750cc66b5688bdfad901efd4';

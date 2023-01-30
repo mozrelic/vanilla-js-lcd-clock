@@ -3,21 +3,14 @@
 // NOTES:
 //
 
-import { ClockClassTemplate } from './src/js/clockClassTemplate.js';
-import markup from './src/js/markup.js';
-import time from './src/js/time.js';
+import { ClockClassTemplate } from './ClockClassTemplate';
+import markup from './markup';
+import time from './TimeObject';
 
 class ClockView extends ClockClassTemplate {
     timeInterval;
     target;
     options;
-    // defaultOptions = {
-    //     target: '.clock-container',
-    //     activeColor: 'undefined',
-    //     inactiveColor: 'undefined',
-    //     clockMeta: true,
-    //     hour12: false,
-    // };
 
     #setOptions(options) {
         this.options = { ...options };
