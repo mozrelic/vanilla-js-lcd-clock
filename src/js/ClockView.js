@@ -50,6 +50,7 @@ class ClockView extends ClockClassTemplate {
     }
 
     #setMeta(timeObj) {
+        if (this.options.clockMeta === false) return;
         const target = document.querySelector('.clock-meta-container');
         // this is a different way of spreading the target children into a new variable
         // const metaTargetArr = Object.values(target.children);
@@ -90,7 +91,6 @@ class ClockView extends ClockClassTemplate {
         const timeObj = time.getTime(this.options);
         this.#setAntePost(timeObj);
         this.#setTime(timeObj);
-        if (this.options.clockMeta === false) return;
         this.#setMeta(timeObj);
     }
 

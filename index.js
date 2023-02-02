@@ -7,7 +7,7 @@ import { getWeather, renderWeather } from './src/js/WeatherView';
 clockView.start({
     // target: '.clock-container',
     hour12: true,
-    // clockMeta: true,
+    // clockMeta: false,
     // activeColor: 'purple',
     // inactiveColor: 'green',
 });

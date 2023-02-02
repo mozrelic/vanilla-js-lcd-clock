@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ClockClassTemplate } from './ClockClassTemplate';
+import Markup from './markup';
 
 const zipCode = '97756';
 const apiKey = 'ef9f7861750cc66b5688bdfad901efd4';
@@ -56,23 +57,16 @@ export function renderWeather(data) {
     description: data.weather[0].description,
     iconId: data.weather[0].id,
     icon: data.weather[0].icon,
+    // TODO:
+    // need to pad the temperature digits with a zero, or make sure
+    // that if temp is a single digit, that the decimal point isn't shown.
     temp: data.main.temp.toString().split('').slice(0, 2).join(''),
   };
 
   const dayOrNight = cleanData.icon.at(-1);
 
-  const weatherMarkup = `
-  <div class="location-title">${cleanData.name}</div>
-    <div class="icon">
-    <i class="wi wi-owm-${dayOrNight === 'n' ? 'night' : 'day'}-${cleanData.iconId
-    }"></i>
-    </div>
- <div class="temp"> <i class="wi wi-fahrenheit"></i>${cleanData.temp}</div >
-    <div class="description">
-      ${cleanData.description}
-    </div>
- 
-    `;
-
-  target.insertAdjacentHTML('afterbegin', weatherMarkup);
+  target.insertAdjacentHTML(
+    'afterbegin',
+    Markup.weatherMarkup(cleanData, dayOrNight)
+  );
 }

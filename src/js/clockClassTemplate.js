@@ -1,7 +1,4 @@
 export class ClockClassTemplate {
-  // timeInterval;
-  // target;
-  // options;
   defaultOptions = {
     target: '.clock-container',
     activeColor: 'undefined',
@@ -10,4 +7,3 @@ export class ClockClassTemplate {
     hour12: false,
   };
 }
-// export default new ClockClassTemplate();
