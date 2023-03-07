@@ -55,6 +55,7 @@ class ClockView extends ClockClassTemplate {
         // this is a different way of spreading the target children into a new variable
         // const metaTargetArr = Object.values(target.children);
         const metaTargetArr = [...target.children];
+        let segmentGuard = metaTargetArr[0].children[1];
 
         const metaDataArr = [
             {
@@ -71,20 +72,23 @@ class ClockView extends ClockClassTemplate {
             },
         ];
 
-        function observerCallback(mutationList, observer) {
-            if (mutationList.length === 0) return;
-
+        const setMeta = () => {
             metaTargetArr.forEach((segment, index) => {
                 let { 0: num1, 1: num2 } = segment.children;
 
                 num1.setAttribute('class', `num-${metaDataArr[index].val1}`);
                 num2.setAttribute('class', `num-${metaDataArr[index].val2}`);
             });
-
+        };
+        function observerCallback(_, observer) {
+            setMeta();
             observer.disconnect();
         }
-
-        this.#checkIfLoaded(observerCallback, target);
+        if (!segmentGuard) {
+            this.#checkIfLoaded(observerCallback, target);
+        } else {
+            setMeta();
+        }
     }
 
     #updateTime() {
@@ -140,6 +144,7 @@ class ClockView extends ClockClassTemplate {
             ...this.target.querySelector('.clock-face').children,
         ];
         const [hourEl, minutesEl, secondsEl] = clockFace;
+        let segmentGuard = hourEl.firstElementChild;
 
         const setTime = () => {
             hourEl.firstElementChild.setAttribute(
@@ -165,16 +170,16 @@ class ClockView extends ClockClassTemplate {
             );
         };
 
-        const observerCallback = (mutationList, observer) => {
+        const observerCallback = (_, observer) => {
             setTime();
             observer.disconnect();
         };
         // check to see if hour element exists, if it doesn't, use mutation observer
         // this if else exists because on initialization, we need to set the time as soon as the digits become available, and then we need to update time
         // so we check to see if the first digit in the hours segment exists, and if it does, we render time as SOON as the empty digit is in the screen
-        // then, otherwise, setInterval in start() will just call setTime(). If I don't do the if check on hourEl, I get a flash of unset time on init, and if
+        // then, otherwise, setInterval in start() will just call setTime(). If I don't do the if check on segmentGuard, I get a flash of unset time on init, and if
         // I don't call setTime in the the else condition, the clock won't update when setInterval fires.
-        if (!hourEl.firstElementChild) {
+        if (!segmentGuard) {
             this.#checkIfLoaded(observerCallback, target);
         } else {
             setTime();
