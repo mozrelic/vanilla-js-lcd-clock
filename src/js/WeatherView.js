@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { ClockClassTemplate } from './ClockClassTemplate';
 import Markup from './markup';
 
 const zipCode = '97756';
@@ -7,6 +6,9 @@ const apiKey = 'ef9f7861750cc66b5688bdfad901efd4';
 
 const BASE_URL_GEO = `http://api.openweathermap.org/geo/1.0/zip?zip=${zipCode}&appid=${apiKey}`;
 // const BASE_URL_WEATHER = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+// TODO: turn this into a class that accepts options passed into from the user to set zip code and apikey. Also need
+// to add a setInterval to update the weather
 
 const spinner = document.querySelector('.lds-ring');
 
@@ -35,7 +37,7 @@ export async function getWeather() {
       timeout: 2000,
     };
     const response = await axios(options).then((res) => {
-      console.log(res);
+      // console.log(res);
       if (res.statusText !== 'OK') return;
       const { data } = res;
       spinner.classList.add('hidden');
