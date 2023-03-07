@@ -15,6 +15,42 @@
 </head>
 
 <body>
+  <div class="settings">
+    <div class="column">
+      <div class="toggle">
+        <label for="set-clock-meta">Show D/M/Y</label>
+        <div class="checkbox-container">
+          <input name="set-clock-meta" type="checkbox" class="set-clock-meta checkbox" />
+          <div class="knobs"></div>
+          <div class="toggle-bg"></div>
+        </div>
+      </div>
+      <div class="toggle">
+        <label for="set-24-hour">Show 24 hour</label>
+        <div class="checkbox-container">
+          <input type="checkbox" name="set-24-hour" class="set-24-hour checkbox" />
+          <div class="knobs"></div>
+          <div class="toggle-bg"></div>
+
+        </div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="field-container">
+        <input type="text" name="set-active-color" class="set-active-color" autocomplete="off" />
+        <label for="set-active-color">Set Active Color</label>
+      </div>
+      <div class="field-container">
+        <input type="text" name="set-inactive-color" class="set-inactive-color" autocomplete="off" />
+        <label for="set-inactive-color">Set Inactive Color</label>
+      </div>
+      <div class="field-container">
+        <input type="text" name="set-target" class="set-target" autocomplete="off" />
+        <label for="set-target">Set Target</label>
+
+      </div>
+    </div>
+  </div>
   <div class="weather-container">
     <div class="lds-ring">
       <div></div>
