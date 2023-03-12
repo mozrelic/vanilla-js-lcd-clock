@@ -1,17 +1,17 @@
 .weather {
-    position: relative;
     color: var(--active-color);
-    // padding: 3rem;
-    margin: 6rem;
     display: flex;
     flex-direction: column;
-    // gap: 0.5rem;
-    text-align: center;
+    /* padding: 3rem;*/
+    margin: 6rem;
     opacity: 0;
+    position: relative;
+    /* gap: 0.5rem;*/
+    text-align: center;
 
     &.show {
-        transition: opacity 0.7s ease-in-out;
         opacity: 1;
+        transition: opacity 0.7s ease-in-out;
     }
     .icon,
     .temp {
@@ -23,23 +23,23 @@
         font-weight: 400;
     }
     .icon {
-        position: absolute;
-        top: 4rem;
-        right: 1rem;
         font-size: 1rem;
+        position: absolute;
+        right: 1rem;
+        top: 4rem;
 
-        // margin: 0.5rem;
+        /* margin: 0.5rem;*/
     }
     .temp {
-        position: relative;
         font-size: 4.5rem;
         font-weight: 200;
+        position: relative;
         i {
-            position: absolute;
-            left: 0;
             font-size: 2.3rem;
-            // margin-right: 0.3rem;
+            left: 0;
+            /* margin-right: 0.3rem;*/
             margin-top: 1.4rem;
+            position: absolute;
         }
     }
     .description {
@@ -49,33 +49,33 @@
     }
 }
 .lds-ring {
-    height: 212px;
     display: block;
-    position: relative;
-    width: 80px;
+    height: 212px;
     height: 80px;
-    opacity: 1;
-    transition: opacity 1s ease-in-out;
     margin: 0 auto;
     margin-top: 8rem;
+    opacity: 1;
+    position: relative;
+    transition: opacity 1s ease-in-out;
+    width: 80px;
     &.hidden {
-        transition: opacity 1s ease-in-out;
+        display: none;
         margin: 0 auto;
         opacity: 0;
-        display: none;
+        transition: opacity 1s ease-in-out;
     }
 }
 .lds-ring div {
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border: 8px solid #fff;
+    border-color: #fff transparent transparent transparent;
+    border-radius: 50%;
     box-sizing: border-box;
     display: block;
-    position: absolute;
-    width: 64px;
     height: 64px;
     margin: 8px;
-    border: 8px solid #fff;
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #fff transparent transparent transparent;
+    position: absolute;
+    width: 64px;
 }
 .lds-ring div:nth-child(1) {
     animation-delay: -0.45s;

@@ -1,26 +1,26 @@
 :root {
-    // main container grid
+    /* main container grid*/
     --grid-gutter: var(
         --space-s-l,
         clamp(1.13rem, calc(-9.87rem + 55vw), 2.5rem)
     );
 
-    // font
+    /* font*/
     --font-family: 'Manrope', sans-serif;
 
-    // colors
+    /* colors*/
     --bg-color: #0f191f;
     --inactive-color: #262626;
     --active-color: #c9d1d9;
     --active-color-dark: #939aa1;
 
-    // sizes
+    /* sizes*/
     --clock-face-width: 50rem;
     --letter-width-multiplier: 0.5;
     --am-pm-letters-width: calc(100% * var(--letter-width-multiplier));
     --spacing: clamp(2.25rem, calc(1.29rem + 4.78vw), 5rem);
 
-    // forms
+    /* forms*/
     --border-radius: 0.4rem;
     --input-height: 3.1rem;
 }
