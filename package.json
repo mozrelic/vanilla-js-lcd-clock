@@ -9,10 +9,14 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "postcss": "^8.4.21",
+    "postcss-cli": "^10.1.0",
+    "postcss-sorting": "^8.0.2",
     "sass": "^1.57.1",
     "vite": "^4.0.0"
   },
   "dependencies": {
-    "axios": "^1.2.5"
+    "axios": "^1.2.5",
+    "postcss-scss": "^4.0.6"
   }
 }
