@@ -8,9 +8,12 @@ clockView.start({
     // target: '.clock-container',
     hour12: true,
     // clockMeta: false,
-    // activeColor: 'purple',
+    // activeColor: '#7921c6',
     // inactiveColor: 'green',
 });
 
+const target = document.querySelector('.set-zipcode');
+
+// console.log(target);
 const weatherData = await getWeather();
 renderWeather(weatherData);

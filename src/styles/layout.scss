@@ -1,14 +1,5 @@
 // @use 'custom-properties';
 
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    // font-family: 'PT Sans', sans-serif;
-    // font-family: 'Bungee', cursive;
-    font-family: var(--font-family);
-}
-
 body {
     background: var(--bg-color);
     height: 100vh;
