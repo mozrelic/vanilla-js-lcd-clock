@@ -6,6 +6,7 @@
 import { ClockClassTemplate } from './ClockClassTemplate';
 import markup from './markup';
 import time from './TimeObject';
+import { rgbToHsl } from './helpers/hexToHsl';
 
 class ClockView extends ClockClassTemplate {
     timeInterval;
@@ -45,6 +46,17 @@ class ClockView extends ClockClassTemplate {
             document.documentElement.style.setProperty(
                 '--active-color',
                 `${activeColor}`
+            );
+
+            // converting active-color to hsl so we can automatically create a variation of the color
+            // and set it as --active-color-dark
+            const h = rgbToHsl(activeColor)[0] * 360;
+            const s = rgbToHsl(activeColor)[1] * 360;
+            const l = rgbToHsl(activeColor)[2] * 360;
+
+            document.documentElement.style.setProperty(
+                '--active-color-dark',
+                `hsl(${h},${s}%,${l / 5}%)`
             );
         }
     }
@@ -177,7 +189,7 @@ class ClockView extends ClockClassTemplate {
         // check to see if hour element exists, if it doesn't, use mutation observer
         // this if else exists because on initialization, we need to set the time as soon as the digits become available, and then we need to update time
         // so we check to see if the first digit in the hours segment exists, and if it does, we render time as SOON as the empty digit is in the screen
-        // then, otherwise, setInterval in start() will just call setTime(). If I don't do the if check on segmentGuard, I get a flash of unset time on init, and if
+        // then, otherwise, setInterval in start() will just call setTime(). If I don't do the if check on hourEl, I get a flash of unset time on init, and if
         // I don't call setTime in the the else condition, the clock won't update when setInterval fires.
         if (!segmentGuard) {
             this.#checkIfLoaded(observerCallback, target);
