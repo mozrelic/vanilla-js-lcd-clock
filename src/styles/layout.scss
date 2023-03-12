@@ -1,12 +1,12 @@
 /* @use 'custom-properties';*/
 
 body {
-    align-items: center;
-    background: var(--bg-color);
     display: flex;
-    flex-direction: column;
     height: 100vh;
     margin: 0 5%;
+    align-items: center;
+    background: var(--bg-color);
+    flex-direction: column;
 }
 
 .container {
@@ -25,8 +25,8 @@ body {
 }
 
 .clock-face {
-    align-self: start;
     display: flex;
+    align-self: start;
     flex-direction: row;
     gap: 10%;
     grid-area: clock-face;
@@ -37,14 +37,14 @@ body {
         display: flex;
         position: relative;
         &:not(:last-of-type):after {
-            background: var(--active-color);
-            border-radius: 1rem;
-            bottom: 0;
             content: '';
-            height: 1vw;
             position: absolute;
             right: -1rem;
+            bottom: 0;
             width: 1vw;
+            height: 1vw;
+            background: var(--active-color);
+            border-radius: 1rem;
         }
     }
 }
@@ -77,15 +77,15 @@ body {
 }
 
 .am-pm {
-    align-self: start;
     display: flex;
+    align-self: start;
     flex-direction: column;
     grid-area: antePost;
     max-width: 150px;
     svg {
         display: block;
-        fill: var(--inactive-color);
         height: auto;
+        fill: var(--inactive-color);
         margin-bottom: 1rem;
         max-width: var(--am-pm-letters-width);
         &.its-pm,
