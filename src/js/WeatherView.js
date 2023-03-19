@@ -1,8 +1,9 @@
 import axios from 'axios';
 import markup from './markup';
+import { checkIfLoaded } from './helpers/checkIfLoaded';
 
-// TODO: turn this into a class that accepts options passed into from the user to set zip code and apikey. Also need
-// to add a setInterval to update the weather
+// TODO:
+//
 
 // create a WeatherView class with a constructor that accepts parameters for zipcode, apikey, and a callback function
 class WeatherView {
@@ -29,7 +30,7 @@ class WeatherView {
     }
 
     async #getWeather() {
-        const target = document.querySelector('.weather');
+        const target = document.querySelector('.weather-container');
         const spinner = document.querySelector('.lds-ring');
 
         const baseURL = this.#BASE_URL_WEATHER;
@@ -92,22 +93,8 @@ class WeatherView {
     }
 
     async #renderWeather() {
-        const target = document.querySelector('.weather');
+        const target = document.querySelector('.weather-container');
         const data = await this.#updateWeater();
-        // const data = await this.#getWeather();
-        //
-        // const cleanData = {
-        //     name: data.name,
-        //     description: data.weather[0].description,
-        //     iconId: data.weather[0].id,
-        //     icon: data.weather[0].icon,
-        //     // TODO:
-        //     // need to pad the temperature digits with a zero, or make sure
-        //     // that if temp is a single digit, that the decimal point isn't shown.
-        //     temp: data.main.temp.toString().split('').slice(0, 2).join(''),
-        // };
-        //
-        // const dayOrNight = cleanData.icon.at(-1);
 
         target.insertAdjacentHTML(
             'afterbegin',
