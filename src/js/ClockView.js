@@ -6,6 +6,7 @@
 import { ClockClassTemplate } from './ClockClassTemplate';
 import markup from './markup';
 import time from './TimeObject';
+import { checkIfLoaded } from './helpers/checkIfLoaded';
 import { rgbToHsl } from './helpers/hexToHsl';
 
 class ClockView extends ClockClassTemplate {
@@ -24,13 +25,6 @@ class ClockView extends ClockClassTemplate {
                 : this.defaultOptions.target;
 
         this.target = document.querySelector(`${target}`);
-    }
-
-    #checkIfLoaded(observerCallback, target) {
-        const config = { childList: true, subtree: true };
-
-        const observer = new MutationObserver(observerCallback);
-        observer.observe(target, config);
     }
 
     #setClockColors() {
@@ -97,7 +91,7 @@ class ClockView extends ClockClassTemplate {
             observer.disconnect();
         }
         if (!segmentGuard) {
-            this.#checkIfLoaded(observerCallback, target);
+            checkIfLoaded(observerCallback, target);
         } else {
             setMeta();
         }
@@ -192,7 +186,7 @@ class ClockView extends ClockClassTemplate {
         // then, otherwise, setInterval in start() will just call setTime(). If I don't do the if check on hourEl, I get a flash of unset time on init, and if
         // I don't call setTime in the the else condition, the clock won't update when setInterval fires.
         if (!segmentGuard) {
-            this.#checkIfLoaded(observerCallback, target);
+            checkIfLoaded(observerCallback, target);
         } else {
             setTime();
         }
@@ -235,7 +229,7 @@ class ClockView extends ClockClassTemplate {
         // I had to set up this mutation observer and call it BEFORE we add the initial markup so that the observer would exist
         // when initMarkup is inserted, and then the observer sees that the initial markup is on the page and we are then
         // ready to insert the markup for the actual digits of the clock.
-        this.#checkIfLoaded(observerCallback, target);
+        checkIfLoaded(observerCallback, target);
 
         // finally insert markup, and since the mutation observer is already looking for changes, it will automatically add the digits for each segment
         // when it notices that our initial markup has been added to the page
