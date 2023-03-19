@@ -1,3 +1,9 @@
+/**
+ * @function rgbToHsl - converts a hex color value to HSL
+ * @param {string} color - expects a hex value
+ * @returns {Array} - returns an array of HSL values
+ * @description Converts an RGB color value to HSL. Conversion formula
+ */
 export function rgbToHsl(color) {
   let r = parseInt(color.substr(1, 2), 16); // Grab the hex representation of red (chars 1-2) and convert to decimal (base 10).
   let g = parseInt(color.substr(3, 2), 16);
