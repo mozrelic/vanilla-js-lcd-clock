@@ -1,11 +1,10 @@
 ('use strict');
 
 import './index.scss';
-import clockView from './src/js/ClockView';
-// import { getWeather, renderWeather } from './src/js/WeatherView';
+import ClockView from './src/js/ClockView';
 import WeatherView from './src/js/WeatherView';
 
-clockView.start({
+ClockView.start({
     // target: '.clock-container',
     hour12: true,
     // clockMeta: false,
@@ -14,14 +13,7 @@ clockView.start({
     // inactiveColor: 'green',
 });
 
-const targetFields = document.querySelectorAll('.setting');
-
-console.log(targetFields);
-
 WeatherView.start({
     zipcode: '97756',
     apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
 });
-
-// const weatherData = await getWeather();
-// renderWeather(weatherData);

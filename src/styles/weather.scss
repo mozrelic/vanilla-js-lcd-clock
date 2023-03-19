@@ -1,17 +1,18 @@
 .weather {
     display: flex;
     position: relative;
-    /* padding: 3rem;*/
-    margin: 6rem;
     color: var(--active-color);
     flex-direction: column;
     opacity: 0;
-    /* gap: 0.5rem;*/
     text-align: center;
-
-    &.show {
-        opacity: 1;
-        transition: opacity 0.7s ease-in-out;
+    &-container {
+        margin: 6rem;
+        &.show {
+            .weather {
+                opacity: 1;
+                transition: opacity 0.7s ease-in-out;
+            }
+        }
     }
     .icon,
     .temp {
