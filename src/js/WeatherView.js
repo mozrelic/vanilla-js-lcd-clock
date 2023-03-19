@@ -1,74 +1,119 @@
 import axios from 'axios';
-import Markup from './markup';
-
-const zipCode = '97756';
-const apiKey = 'ef9f7861750cc66b5688bdfad901efd4';
-
-const BASE_URL_GEO = `http://api.openweathermap.org/geo/1.0/zip?zip=${zipCode}&appid=${apiKey}`;
-// const BASE_URL_WEATHER = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+import markup from './markup';
 
 // TODO: turn this into a class that accepts options passed into from the user to set zip code and apikey. Also need
 // to add a setInterval to update the weather
 
-const spinner = document.querySelector('.lds-ring');
+// create a WeatherView class with a constructor that accepts parameters for zipcode, apikey, and a callback function
+class WeatherView {
+    #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
+    #options;
 
-async function getGeo() {
-  try {
-    const response = await axios.get(BASE_URL_GEO);
-    const data = response.data;
+    async #getGeo() {
+        const baseURL = this.#BASE_URL_WEATHER;
+        try {
+            const { zipcode, apiKey } = this.#options;
+            console.log(zipcode, apiKey);
+            const options = {
+                baseURL,
+                url: `geo/1.0/zip?zip=${zipcode}&appid=${apiKey}`,
+                timeout: 2000,
+            };
+            const response = await axios(options);
+            const data = response.data;
 
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
+            return data;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async #getWeather() {
+        const target = document.querySelector('.weather');
+        const spinner = document.querySelector('.lds-ring');
+
+        const baseURL = this.#BASE_URL_WEATHER;
+        console.log(baseURL);
+        try {
+            const locationData = await this.#getGeo();
+            const { lat, lon } = locationData;
+
+            const options = {
+                baseURL,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
+                    }`,
+                timeout: 2000,
+            };
+            const response = await axios(options).then((res) => {
+                // console.log(res);
+                if (res.statusText !== 'OK') return;
+                const { data } = res;
+                spinner.classList.add('hidden');
+                target.classList.add('show');
+
+                return data;
+            });
+
+            return response;
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    async start(userOptions) {
+        this.#options = { ...userOptions };
+        try {
+            this.#renderWeather();
+            this.timeInterval = setInterval(
+                () => this.#renderWeather(),
+                1000 * 300
+            );
+        } catch (error) { }
+    }
+
+    async #updateWeater() {
+        const data = await this.#getWeather();
+
+        const cleanData = {
+            weatherData: {
+                name: data.name,
+                description: data.weather[0].description,
+                iconId: data.weather[0].id,
+                // icon: data.weather[0].icon.at(-1),
+                // TODO:
+                // need to pad the temperature digits with a zero, or make sure
+                // that if temp is a single digit, that the decimal point isn't shown.
+                temp: data.main.temp.toString().split('').slice(0, 2).join(''),
+            },
+            icon: data.weather[0].icon.at(-1),
+        };
+
+        return cleanData;
+    }
+
+    async #renderWeather() {
+        const target = document.querySelector('.weather');
+        const data = await this.#updateWeater();
+        // const data = await this.#getWeather();
+        //
+        // const cleanData = {
+        //     name: data.name,
+        //     description: data.weather[0].description,
+        //     iconId: data.weather[0].id,
+        //     icon: data.weather[0].icon,
+        //     // TODO:
+        //     // need to pad the temperature digits with a zero, or make sure
+        //     // that if temp is a single digit, that the decimal point isn't shown.
+        //     temp: data.main.temp.toString().split('').slice(0, 2).join(''),
+        // };
+        //
+        // const dayOrNight = cleanData.icon.at(-1);
+
+        target.insertAdjacentHTML(
+            'afterbegin',
+            markup.weatherMarkup(data.weatherData, data.icon)
+        );
+    }
 }
 
-export async function getWeather() {
-  const target = document.querySelector('.weather');
-
-  const baseURL = 'https://api.openweathermap.org/data/2.5/';
-  try {
-    const locationData = await getGeo();
-    const { lat, lon } = locationData;
-
-    const options = {
-      baseURL,
-      url: `weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${apiKey}`,
-      timeout: 2000,
-    };
-    const response = await axios(options).then((res) => {
-      // console.log(res);
-      if (res.statusText !== 'OK') return;
-      const { data } = res;
-      spinner.classList.add('hidden');
-      target.classList.add('show');
-
-      return data;
-    });
-
-    return response;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-export function renderWeather(data) {
-  const target = document.querySelector('.weather');
-  const cleanData = {
-    name: data.name,
-    description: data.weather[0].description,
-    iconId: data.weather[0].id,
-    icon: data.weather[0].icon,
-    // TODO:
-    // need to pad the temperature digits with a zero, or make sure
-    // that if temp is a single digit, that the decimal point isn't shown.
-    temp: data.main.temp.toString().split('').slice(0, 2).join(''),
-  };
-
-  const dayOrNight = cleanData.icon.at(-1);
-
-  target.insertAdjacentHTML(
-    'afterbegin',
-    Markup.weatherMarkup(cleanData, dayOrNight)
-  );
-}
+export default new WeatherView();
