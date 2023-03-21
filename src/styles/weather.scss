@@ -24,25 +24,21 @@
         }
     }
     .temp {
+        display: flex;
         position: relative;
+        width: 200%;
+        padding: 2rem 0;
         font-size: 4.5rem;
         align-self: center;
         max-width: 200px;
-        width: 200%;
-        padding: 1rem 0;
-        i {
-            position: absolute;
-            left: 0;
-            font-size: 2.3rem;
-        }
+        flex-direction: row;
+        gap: 1rem;
     }
     .location-title {
         font-size: 2.4rem;
         font-weight: 400;
     }
     .icon {
-        position: absolute;
-        right: 1rem;
         i {
             font-size: 1.4rem;
         }

@@ -56,9 +56,10 @@ class WeatherView {
 
             return data;
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             spinner.classList.add('hidden');
             target.classList.add('show');
+            return err;
         }
     }
 
@@ -69,7 +70,7 @@ class WeatherView {
         target.insertAdjacentHTML('beforeend', markup.weatherMarkup());
 
         const digitTarget = document.querySelector('.temp-svg');
-        console.log(digitTarget);
+        // console.log(digitTarget);
         digitTarget.insertAdjacentHTML('afterbegin', markup.digitMarkup());
     }
 
@@ -94,7 +95,8 @@ class WeatherView {
 
             return cleanData;
         } catch (err) {
-            console.log(err);
+            // console.log(err);
+            return err;
         }
     }
 
@@ -103,6 +105,7 @@ class WeatherView {
 
         try {
             const data = await this.#updateWeather();
+            // console.log(data);
 
             const digitTarget = document.querySelector('.temp-svg');
             const locationTitle = document.querySelector('.location-title');
@@ -122,33 +125,46 @@ class WeatherView {
             locationTitle.innerText = data.weatherData.name;
         } catch (err) {
             console.log(err);
+            return err;
         }
     }
-
-    start(userOptions) {
-        this.#options = { ...userOptions };
-        this.#init();
-        this.#renderWeatherUpdates();
-
-        this.#timeInterval = setInterval(
-            () => this.#renderWeatherUpdates(),
-            1000 * 3
-        );
+    #stop(err) {
+        clearInterval(this.#timeInterval);
+        console.log(err);
+        return;
     }
-    // async start(userOptions) {
+
+    // start(userOptions) {
     //     this.#options = { ...userOptions };
-    //     try {
-    //         this.#init();
-    //         await this.#renderWeatherUpdates();
+    //     this.#init();
+    //     this.#renderWeatherUpdates();
+    //     console.log(this.#renderWeatherUpdates);
     //
-    //         this.#timeInterval = setInterval(
-    //             async () => await this.#renderWeatherUpdates(),
-    //             1000 * 3
-    //         );
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
+    //     this.#timeInterval = setInterval(
+    //         () =>
+    //             this.#renderWeatherUpdates().catch((err) => {
+    //                 console.log(err);
+    //                 this.#stop(err);
+    //                 return;
+    //             }),
+    //         1000 * 3
+    //     );
     // }
+    async start(userOptions) {
+        this.#options = { ...userOptions };
+        try {
+            this.#init();
+            await this.#renderWeatherUpdates();
+
+            this.#timeInterval = setInterval(
+                async () => await this.#renderWeatherUpdates,
+                1000 * 3
+            );
+        } catch (err) {
+            console.log(err);
+            this.#stop(err);
+        }
+    }
 }
 
 export default new WeatherView();
