@@ -1,20 +1,19 @@
 import axios from 'axios';
 import markup from './markup';
-import { checkIfLoaded } from './helpers/checkIfLoaded';
 
 // TODO:
 //
 
-// create a WeatherView class with a constructor that accepts parameters for zipcode, apikey, and a callback function
 class WeatherView {
     #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
     #options;
+    #timeInterval;
 
     async #getGeo() {
         const baseURL = this.#BASE_URL_WEATHER;
         try {
             const { zipcode, apiKey } = this.#options;
-            console.log(zipcode, apiKey);
+
             const options = {
                 baseURL,
                 url: `geo/1.0/zip?zip=${zipcode}&appid=${apiKey}`,
@@ -34,73 +33,122 @@ class WeatherView {
         const spinner = document.querySelector('.lds-ring');
 
         const baseURL = this.#BASE_URL_WEATHER;
-        console.log(baseURL);
+
         try {
             const locationData = await this.#getGeo();
             const { lat, lon } = locationData;
 
             const options = {
                 baseURL,
-                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
-                    }`,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${
+                    this.#options.apiKey
+                }`,
                 timeout: 2000,
             };
-            const response = await axios(options).then((res) => {
-                // console.log(res);
-                if (res.statusText !== 'OK') return;
-                const { data } = res;
-                spinner.classList.add('hidden');
-                target.classList.add('show');
 
-                return data;
-            });
+            const response = await axios(options);
 
-            return response;
+            if (response.statusText !== 'OK') return;
+            const { data } = response;
+
+            spinner.classList.add('hidden');
+            target.classList.add('show');
+
+            return data;
+        } catch (err) {
+            console.log(err);
+            spinner.classList.add('hidden');
+            target.classList.add('show');
+        }
+    }
+
+    #init() {
+        const target = document.querySelector('.weather-container');
+
+        target.insertAdjacentHTML('afterbegin', markup.loadingSpinnerMarkup());
+        target.insertAdjacentHTML('beforeend', markup.weatherMarkup());
+
+        const digitTarget = document.querySelector('.temp-svg');
+        console.log(digitTarget);
+        digitTarget.insertAdjacentHTML('afterbegin', markup.digitMarkup());
+    }
+
+    async #updateWeather() {
+        try {
+            const data = await this.#getWeather();
+
+            const cleanData = {
+                weatherData: {
+                    name: data.name,
+                    description: data.weather[0].description,
+                    temp: {
+                        val1: data.main.temp.toString().split('').slice(0, 1),
+                        val2: data.main.temp.toString().split('').slice(1, 2),
+                    },
+                },
+                iconData: {
+                    icon: data.weather[0].icon.at(-1),
+                    iconId: data.weather[0].id,
+                },
+            };
+
+            return cleanData;
         } catch (err) {
             console.log(err);
         }
     }
 
-    async start(userOptions) {
-        this.#options = { ...userOptions };
+    async #renderWeatherUpdates() {
+        const weatherDescription = document.querySelector('.description');
+
         try {
-            this.#renderWeather();
-            this.timeInterval = setInterval(
-                () => this.#renderWeather(),
-                1000 * 300
+            const data = await this.#updateWeather();
+
+            const digitTarget = document.querySelector('.temp-svg');
+            const locationTitle = document.querySelector('.location-title');
+            const weatherIcon = document.querySelector('.icon i');
+
+            const { 0: digitOne, 1: digitTwo } = digitTarget.children;
+
+            digitOne.setAttribute('class', `num-${data.weatherData.temp.val1}`);
+            digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
+            weatherIcon.setAttribute(
+                'class',
+                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
+                    data.iconData.iconId
+                }`
             );
-        } catch (error) { }
+            weatherDescription.innerText = data.weatherData.description;
+            locationTitle.innerText = data.weatherData.name;
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    async #updateWeater() {
-        const data = await this.#getWeather();
+    start(userOptions) {
+        this.#options = { ...userOptions };
+        this.#init();
+        this.#renderWeatherUpdates();
 
-        const cleanData = {
-            weatherData: {
-                name: data.name,
-                description: data.weather[0].description,
-                iconId: data.weather[0].id,
-                // icon: data.weather[0].icon.at(-1),
-                // TODO:
-                // need to pad the temperature digits with a zero, or make sure
-                // that if temp is a single digit, that the decimal point isn't shown.
-                temp: data.main.temp.toString().split('').slice(0, 2).join(''),
-            },
-            icon: data.weather[0].icon.at(-1),
-        };
-
-        return cleanData;
-    }
-
-    async #renderWeather() {
-        const target = document.querySelector('.weather-container');
-        const data = await this.#updateWeater();
-
-        target.insertAdjacentHTML(
-            'afterbegin',
-            markup.weatherMarkup(data.weatherData, data.icon)
+        this.#timeInterval = setInterval(
+            () => this.#renderWeatherUpdates(),
+            1000 * 3
         );
     }
+    // async start(userOptions) {
+    //     this.#options = { ...userOptions };
+    //     try {
+    //         this.#init();
+    //         await this.#renderWeatherUpdates();
+    //
+    //         this.#timeInterval = setInterval(
+    //             async () => await this.#renderWeatherUpdates(),
+    //             1000 * 3
+    //         );
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 }
 
 export default new WeatherView();

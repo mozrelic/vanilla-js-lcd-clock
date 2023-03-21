@@ -1,6 +1,6 @@
 class Markup {
-  initMarkup() {
-    return `
+    initMarkup() {
+        return `
         <div class="am-pm">
 
         </div>
@@ -23,19 +23,19 @@ class Markup {
       <!-- end of main clock container -->
 
     `;
-  }
+    }
 
-  clockMetaMarkup(metaType) {
-    return `
+    clockMetaMarkup(metaType) {
+        return `
           <section class="svg ${metaType}">
             <div class="meta-title">${metaType}</div>
           </section>
           <!-- end ${metaType} container-->
         `;
-  }
+    }
 
-  antePostMarkup() {
-    return `
+    antePostMarkup() {
+        return `
           <svg
             class="am"
             xmlns="http://www.w3.org/2000/svg"
@@ -65,10 +65,10 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
             />
           </svg>
     `;
-  }
+    }
 
-  digitMarkup() {
-    return `
+    digitMarkup() {
+        return `
       <svg
     class=""
     xmlns="http://www.w3.org/2000/svg"
@@ -153,24 +153,47 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
       />
       </svg>
       `;
-  }
+    }
 
-  weatherMarkup(data, dayOrNight) {
-    return `
-  <div class="weather">
-  <div class="location-title">${data.name}</div>
-    <div class="icon">
-    <i class="wi wi-owm-${dayOrNight === 'n' ? 'night' : 'day'}-${data.iconId
-      }"></i>
+    loadingSpinnerMarkup() {
+        return `
+    <div class="lds-ring">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-   <div class="temp"> <i class="wi wi-fahrenheit"></i>${data.temp}</div >
-    <div class="description">
-      ${data.description}
-    </div>
-  </div>
- 
     `;
-  }
+    }
+
+    weatherMarkup(data, iconData) {
+        return `
+  <div class="weather">
+  <div class="location-title">${data?.name || '--'}</div>
+      <div class="temp">
+    <div class="icon">
+    <i class="wi wi-${
+        iconData?.icon === 'n'
+            ? 'owm-night'
+            : iconData?.icon === 'd'
+            ? 'owm-day'
+            : !iconData?.icon
+            ? 'fire'
+            : ''
+    }-${iconData?.iconId || ''}"></i>
+    </div>
+    <i class="wi wi-fahrenheit"></i>
+        <div class="svg temp-svg">
+
+        </div>
+      </div>
+    <div class="description">
+        ${data?.description || '--'}
+      </div>
+    </div>
+   
+      `;
+    }
 }
 
 export default new Markup();

@@ -18,6 +18,23 @@
     .temp {
         display: flex;
         justify-content: center;
+        .temp-svg {
+            display: flex;
+            max-width: 100px;
+        }
+    }
+    .temp {
+        position: relative;
+        font-size: 4.5rem;
+        align-self: center;
+        max-width: 200px;
+        width: 200%;
+        padding: 1rem 0;
+        i {
+            position: absolute;
+            left: 0;
+            font-size: 2.3rem;
+        }
     }
     .location-title {
         font-size: 2.4rem;
@@ -25,22 +42,9 @@
     }
     .icon {
         position: absolute;
-        top: 4rem;
         right: 1rem;
-        font-size: 1rem;
-
-        /* margin: 0.5rem;*/
-    }
-    .temp {
-        position: relative;
-        font-size: 4.5rem;
-        font-weight: 200;
         i {
-            position: absolute;
-            left: 0;
-            font-size: 2.3rem;
-            /* margin-right: 0.3rem;*/
-            margin-top: 1.4rem;
+            font-size: 1.4rem;
         }
     }
     .description {
