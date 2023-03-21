@@ -3,6 +3,7 @@
 import './index.scss';
 import ClockView from './src/js/ClockView';
 import WeatherView from './src/js/WeatherView';
+import { modalHandler } from './src/js/helpers/modal';
 
 ClockView.start({
     // target: '.clock-container',
@@ -17,3 +18,5 @@ WeatherView.start({
     zipcode: '97756',
     apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
 });
+
+modalHandler();

@@ -1,0 +1,12 @@
+.modal-container {
+    width: 100vw;
+    height: 100vw;
+    display: flex;
+    flex-direction: column;
+    &.show {
+        display: none;
+    }
+    &.hidden {
+        display: none;
+    }
+}
