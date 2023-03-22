@@ -40,9 +40,8 @@ class WeatherView {
 
             const options = {
                 baseURL,
-                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${
-                    this.#options.apiKey
-                }`,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
+                    }`,
                 timeout: 2000,
             };
 
@@ -50,6 +49,7 @@ class WeatherView {
 
             if (response.statusText !== 'OK') return;
             const { data } = response;
+            // console.log(data);
 
             spinner.classList.add('hidden');
             target.classList.add('show');
@@ -117,8 +117,7 @@ class WeatherView {
             digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
             weatherIcon.setAttribute(
                 'class',
-                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
-                    data.iconData.iconId
+                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${data.iconData.iconId
                 }`
             );
             weatherDescription.innerText = data.weatherData.description;
@@ -157,7 +156,7 @@ class WeatherView {
             await this.#renderWeatherUpdates();
 
             this.#timeInterval = setInterval(
-                async () => await this.#renderWeatherUpdates,
+                async () => await this.#renderWeatherUpdates(),
                 1000 * 3
             );
         } catch (err) {
