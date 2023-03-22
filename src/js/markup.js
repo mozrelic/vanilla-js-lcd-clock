@@ -166,21 +166,28 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
     `;
     }
 
+    settingsButton() {
+        return `
+      <div class="modal-trigger">
+        <button type="modal-trigger-button" data-toggle="modal">Settings</button>
+      </div>
+        `;
+    }
+
     weatherMarkup(data, iconData) {
         return `
   <div class="weather">
   <div class="location-title">${data?.name || '--'}</div>
       <div class="temp">
     <div class="icon">
-    <i class="wi wi-${
-        iconData?.icon === 'n'
-            ? 'owm-night'
-            : iconData?.icon === 'd'
-            ? 'owm-day'
-            : !iconData?.icon
-            ? 'fire'
-            : ''
-    }-${iconData?.iconId || ''}"></i>
+    <i class="wi wi-${iconData?.icon === 'n'
+                ? 'owm-night'
+                : iconData?.icon === 'd'
+                    ? 'owm-day'
+                    : !iconData?.icon
+                        ? 'fire'
+                        : ''
+            }-${iconData?.iconId || ''}"></i>
     </div>
         <div class="svg temp-svg">
 

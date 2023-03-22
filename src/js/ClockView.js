@@ -210,6 +210,7 @@ class ClockView extends ClockClassTemplate {
         const target = this.target;
         const initMarkup = markup.initMarkup();
         const digits = markup.digitMarkup();
+        const settingsButton = markup.settingsButton();
 
         const observerCallback = (mutationList, observer) => {
             if (mutationList.length === 0) return;
@@ -222,7 +223,6 @@ class ClockView extends ClockClassTemplate {
             completeElementArray.forEach((el) =>
                 el.insertAdjacentHTML('afterbegin', digits)
             );
-
             observer.disconnect();
         };
 
@@ -244,6 +244,8 @@ class ClockView extends ClockClassTemplate {
         const metaTypes = ['day', 'month', 'year'];
 
         metaTypes.forEach((metaType) => this.#renderClockMeta(metaType));
+        const targetAntePost = this.target.querySelector('.am-pm');
+        targetAntePost.insertAdjacentHTML('beforeend', settingsButton);
     }
 }
 
