@@ -15,9 +15,11 @@
 </head>
 
 <body>
-  <div class="modal-container hidden">
+  <!-- <div class="modal-container hidden"> -->
+    <div class="modal-container active">
+
   <div class="settings">
-    <div class="close-button">
+    <div class="close-modal">
       <button type="button" class="close-button">X</button>
     </div>
     <div class="weather-settings ">
@@ -25,14 +27,14 @@
       <div class="columns">
         <div class="column">
           <div class="field-container">
-            <textarea type="textarea" rows="3" name="set-api-key" class="set-api-key setting"
+            <textarea data-type="apiKey" type="textarea" rows="3" name="set-api-key" class="set-api-key setting"
               autocomplete="off" /></textarea>
             <label for="set-api-key">Set API Key</label>
           </div>
         </div>
         <div class="column">
           <div class="field-container">
-            <input type="text" name="set-zipcode" class="set-zipcode setting" autocomplete="off" value="" />
+            <input data-type="zipcode" type="text" name="set-zipcode" class="set-zipcode setting" autocomplete="off" value="" />
             <label for="set-zipcode">Set Zipcode</label>
           </div>
         </div>
@@ -45,7 +47,7 @@
           <div class="toggle">
             <label for="set-clock-meta">Show D/M/Y</label>
             <div class="checkbox-container">
-              <input name="set-clock-meta" type="checkbox" class="set-clock-meta checkbox setting" />
+              <input data-type="showMeta" name="set-clock-meta" type="checkbox" value="" class="set-clock-meta checkbox setting" />
               <div class="knobs"></div>
               <div class="toggle-bg"></div>
             </div>
@@ -53,7 +55,7 @@
           <div class="toggle">
             <label for="set-24-hour">Show 24 hour</label>
             <div class="checkbox-container">
-              <input type="checkbox" name="set-24-hour" class="set-24-hour checkbox setting" />
+              <input data-type="show24" type="checkbox" name="set-24-hour" value="" class="set-24-hour checkbox setting" />
               <div class="knobs"></div>
               <div class="toggle-bg"></div>
             </div>
@@ -61,15 +63,15 @@
         </div>
         <div class="column">
           <div class="field-container">
-            <input type="text" name="set-active-color" class="set-active-color setting" autocomplete="off" />
+            <input data-type="activeColor" type="text" name="set-active-color" value="" class="set-active-color setting" autocomplete="off" />
             <label for="set-active-color">Set Active Color</label>
           </div>
           <div class="field-container">
-            <input type="text" name="set-inactive-color" class="set-inactive-color setting" autocomplete="off" />
+            <input data-type="inactiveColor" type="text" name="set-inactive-color" value="" class="set-inactive-color setting" autocomplete="off" />
             <label for="set-inactive-color">Set Inactive Color</label>
           </div>
           <div class="field-container">
-            <input type="text" name="set-target" class="set-target setting" autocomplete="off" />
+            <input data-type="renderTarget" type="text" name="set-target" value="" class="set-target setting" autocomplete="off" />
             <label for="set-target">Set Target</label>
           </div>
         </div>
