@@ -4,6 +4,9 @@ import './index.scss';
 import ClockView from './src/js/ClockView';
 import WeatherView from './src/js/WeatherView';
 import { modalHandler } from './src/js/helpers/modal';
+import { FormHandler } from './src/js/form';
+
+let settings;
 
 ClockView.start({
     // target: '.clock-container',
@@ -20,3 +23,16 @@ WeatherView.start({
 });
 
 modalHandler();
+
+const doIt = new FormHandler();
+
+const form = document.querySelector('.settings');
+
+form.addEventListener('input', (e) => {
+    const target = e.target.closest('.setting');
+
+    settings = doIt.handleChange(target);
+
+    console.log(settings);
+    // console.log(target);
+});
