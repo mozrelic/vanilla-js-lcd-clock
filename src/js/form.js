@@ -21,8 +21,28 @@ export class FormHandler {
         }
     }
 
+    init(data) {
+        const fields = document.querySelectorAll('.setting');
+        settings = { ...data };
+        console.log(settings);
+
+        fields.forEach((field) => {
+            const attribute = field.getAttribute('data-type');
+
+            if (!field.classList.contains('checkbox'))
+                field.value = settings[attribute];
+
+            if (
+                field.getAttribute('data-type') === 'clockMeta' ||
+                field.getAttribute('data-type') === 'hour12'
+            ) {
+                field.checked = Boolean(settings[attribute]);
+            }
+        });
+    }
+
     handleChange(target) {
-        const value = target.value || target.checked;
+        const value = target.value || Boolean(target.checked);
         const attribute = target.getAttribute('data-type');
 
         this.lastState = this.currentState;
@@ -33,12 +53,12 @@ export class FormHandler {
             this.currentState = {
                 [attribute]: value,
             };
-            this.updateSettings();
+
+            this.#updateSettings();
         }
-        return settings;
     }
 
-    updateSettings() {
+    #updateSettings() {
         settings = {
             ...settings,
             ...this.currentState,

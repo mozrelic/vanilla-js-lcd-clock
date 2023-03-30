@@ -16,7 +16,7 @@
 
 <body>
   <!-- <div class="modal-container hidden"> -->
-    <div class="modal-container active">
+    <div class="modal-container hidden">
 
   <div class="settings">
     <div class="close-modal">
@@ -47,15 +47,15 @@
           <div class="toggle">
             <label for="set-clock-meta">Show D/M/Y</label>
             <div class="checkbox-container">
-              <input data-type="showMeta" name="set-clock-meta" type="checkbox" value="" class="set-clock-meta checkbox setting" />
+              <input data-type="clockMeta" name="set-clock-meta" type="checkbox" value="" class="set-clock-meta checkbox setting" />
               <div class="knobs"></div>
               <div class="toggle-bg"></div>
             </div>
           </div>
           <div class="toggle">
-            <label for="set-24-hour">Show 24 hour</label>
+            <label for="set-12-hour">Show 12 hour</label>
             <div class="checkbox-container">
-              <input data-type="show24" type="checkbox" name="set-24-hour" value="" class="set-24-hour checkbox setting" />
+              <input data-type="hour12" type="checkbox" name="set-12-hour" value="" class="set-12-hour checkbox setting" />
               <div class="knobs"></div>
               <div class="toggle-bg"></div>
             </div>
@@ -63,15 +63,15 @@
         </div>
         <div class="column">
           <div class="field-container">
-            <input data-type="activeColor" type="text" name="set-active-color" value="" class="set-active-color setting" autocomplete="off" />
+            <input data-type="activeColor" type="color" name="set-active-color" class="set-active-color setting" autocomplete="off" />
             <label for="set-active-color">Set Active Color</label>
           </div>
           <div class="field-container">
-            <input data-type="inactiveColor" type="text" name="set-inactive-color" value="" class="set-inactive-color setting" autocomplete="off" />
+            <input data-type="inactiveColor" type="color" name="set-inactive-color" class="set-inactive-color setting" autocomplete="off" />
             <label for="set-inactive-color">Set Inactive Color</label>
           </div>
           <div class="field-container">
-            <input data-type="renderTarget" type="text" name="set-target" value="" class="set-target setting" autocomplete="off" />
+            <input data-type="target" type="text" name="set-target" value="" class="set-target setting" autocomplete="off" disabled />
             <label for="set-target">Set Target</label>
           </div>
         </div>

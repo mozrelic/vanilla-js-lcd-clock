@@ -7,11 +7,15 @@ import { modalHandler } from './src/js/helpers/modal';
 import { FormHandler } from './src/js/form';
 
 let settings;
+const defaultOptions = ClockView.defaultOptions;
+
+settings = { ...defaultOptions, ...settings, hour12: true };
 
 ClockView.start({
+    ...settings,
     // target: '.clock-container',
-    hour12: true,
-    // clockMeta: false,
+    // hour12: true,
+    // clockMeta: true,
     // activeColor: 'oklch(85.29% 0.266 155.65)',
     // activeColor: '#7921c6',
     // inactiveColor: 'green',
@@ -24,15 +28,29 @@ WeatherView.start({
 
 modalHandler();
 
-const doIt = new FormHandler();
+const SettingsForm = new FormHandler();
 
 const form = document.querySelector('.settings');
+
+SettingsForm.init(settings);
+ClockView.setOptions(settings);
 
 form.addEventListener('input', (e) => {
     const target = e.target.closest('.setting');
 
-    settings = doIt.handleChange(target);
+    SettingsForm.handleChange(target);
+    settings = SettingsForm.returnState();
 
-    console.log(settings);
-    // console.log(target);
+    // console.log('settings from index.js', settings);
+    ClockView.setOptions(settings);
+    ClockView.rerenderUpdatedOptions();
+});
+
+const slideIn = document.querySelectorAll('.svg');
+
+slideIn.forEach((el) => {
+    el.classList.add('slideIn');
+    setTimeout(() => {
+        el.classList.remove('slideIn');
+    }, 3200);
 });

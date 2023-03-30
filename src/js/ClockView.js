@@ -14,7 +14,7 @@ class ClockView extends ClockClassTemplate {
     target;
     options;
 
-    #setOptions(options) {
+    setOptions(options) {
         this.options = { ...options };
     }
 
@@ -30,13 +30,13 @@ class ClockView extends ClockClassTemplate {
     #setClockColors() {
         const { activeColor, inactiveColor } = this.options;
 
-        if (inactiveColor !== undefined) {
+        if (inactiveColor) {
             document.documentElement.style.setProperty(
                 '--inactive-color',
                 `${inactiveColor}`
             );
         }
-        if (activeColor !== undefined) {
+        if (activeColor) {
             document.documentElement.style.setProperty(
                 '--active-color',
                 `${activeColor}`
@@ -56,8 +56,9 @@ class ClockView extends ClockClassTemplate {
     }
 
     #setMeta(timeObj) {
-        if (this.options.clockMeta === false) return;
-        const target = document.querySelector('.clock-meta-container');
+        // console.log(this.options);
+        if (this.options.clockMeta === false || !this.options.clockMeta) return;
+        const target = this.target.querySelector('.clock-meta-container');
         // this is a different way of spreading the target children into a new variable
         // const metaTargetArr = Object.values(target.children);
         const metaTargetArr = [...target.children];
@@ -104,28 +105,27 @@ class ClockView extends ClockClassTemplate {
         this.#setMeta(timeObj);
     }
 
-    start(options = this.defaultOptions) {
-        // the call order matters here
-        this.#setOptions(options);
-        this.#setTarget(this.options);
-        this.init();
-        this.#setClockColors(this.options);
-        this.#updateTime();
-        this.timeInterval = setInterval(() => this.#updateTime(), 1000);
-    }
-
-    stop() {
-        clearInterval(this.timeInterval);
+    #destroyElement(targetEl) {
+        const elementGuard = [
+            ...this.target.querySelector(`${targetEl}`).children,
+        ];
+        if (elementGuard.length > 0) {
+            elementGuard.forEach((element) => {
+                element.remove();
+            });
+        }
     }
 
     #setAntePost(timeObj) {
-        if (!this.options.hour12) return;
-        const antePostEl = this.target.querySelector('.am-pm');
+        if (this.options.hour12 === false || !this.options.hour12) return;
+        const antePostEl = this.target.querySelector('.ante-post-svgs');
         // get children elements of am-pm parent container
         const { 0: amEl, 1: pmEl } = antePostEl.children;
 
         const elClass = timeObj.antePost === 'am' ? 'its-am' : 'its-pm';
 
+        // check if both elements exist before proceeding
+        if (!amEl || !pmEl) return;
         // check if both elements have their active class
         const resetLetters =
             amEl.classList.contains('its-am') &&
@@ -193,35 +193,49 @@ class ClockView extends ClockClassTemplate {
     }
 
     #renderAntePost() {
+        if (!this.options.hour12 || this.options.hour12 === false) return;
+
         const target = this.target.querySelector('.am-pm');
         const antePostMarkup = markup.antePostMarkup();
 
         target.insertAdjacentHTML('afterbegin', antePostMarkup);
     }
 
-    #renderClockMeta(metaType) {
-        const metaTarget = this.target.querySelector('.clock-meta-container');
-        const metaMarkup = markup.clockMetaMarkup(metaType);
+    #renderClockMeta() {
+        if (!this.options.clockMeta || this.options.clockMeta === false) return;
 
-        metaTarget.insertAdjacentHTML('beforeend', metaMarkup);
+        const metaTypes = ['day', 'month', 'year'];
+        const metaTarget = this.target.querySelector('.clock-meta-container');
+        const digitsMarkup = markup.digitMarkup();
+
+        metaTypes.forEach((item) => {
+            const metaMarkup = markup.clockMetaMarkup(item);
+
+            metaTarget.insertAdjacentHTML('beforeend', metaMarkup);
+        });
+
+        const metaTargetforDigits = [...metaTarget.children];
+        metaTargetforDigits.forEach((item) => {
+            item.insertAdjacentHTML('afterbegin', digitsMarkup);
+        });
     }
 
     init() {
         const target = this.target;
         const initMarkup = markup.initMarkup();
-        const digits = markup.digitMarkup();
-        const settingsButton = markup.settingsButton();
+        const digitMarkup = markup.digitMarkup();
+        const settingsButtonMarkup = markup.settingsButtonMarkup();
 
         const observerCallback = (mutationList, observer) => {
             if (mutationList.length === 0) return;
 
             const completeElementArray = [
-                ...target.querySelector('.clock-meta-container').children,
+                // ...target.querySelector('.clock-meta-container').children,
                 ...target.querySelector('.clock-face').children,
             ];
 
             completeElementArray.forEach((el) =>
-                el.insertAdjacentHTML('afterbegin', digits)
+                el.insertAdjacentHTML('afterbegin', digitMarkup)
             );
             observer.disconnect();
         };
@@ -233,19 +247,38 @@ class ClockView extends ClockClassTemplate {
 
         // finally insert markup, and since the mutation observer is already looking for changes, it will automatically add the digits for each segment
         // when it notices that our initial markup has been added to the page
-        this.target.insertAdjacentHTML('afterbegin', initMarkup);
+        target.insertAdjacentHTML('afterbegin', initMarkup);
 
+        // have to define targetAntePost here after initMarkup is inserted
+        const targetAntePost = target.querySelector('.am-pm');
         // render AntePost glyphs based on whether or not 12 hour clock is being shown
-        if (this.options.hour12) this.#renderAntePost();
-
+        this.#renderAntePost();
         // render clock meta (day month year) based on what the user has set as an option. The default is to show it
-        if (this.options.clockMeta === false) return;
+        this.#renderClockMeta();
 
-        const metaTypes = ['day', 'month', 'year'];
+        targetAntePost.insertAdjacentHTML('beforeend', settingsButtonMarkup);
+    }
+    start(options = this.defaultOptions) {
+        // the call order matters here
+        this.setOptions(options);
+        this.#setTarget(this.options);
+        this.init();
+        this.#setClockColors(this.options);
+        this.#updateTime();
+        this.timeInterval = setInterval(() => this.#updateTime(), 1000);
+    }
 
-        metaTypes.forEach((metaType) => this.#renderClockMeta(metaType));
-        const targetAntePost = this.target.querySelector('.am-pm');
-        targetAntePost.insertAdjacentHTML('beforeend', settingsButton);
+    stop() {
+        clearInterval(this.timeInterval);
+    }
+    rerenderUpdatedOptions() {
+        this.#setClockColors();
+
+        this.#destroyElement('.ante-post-svgs');
+        this.#renderAntePost();
+
+        this.#destroyElement('.clock-meta-container');
+        this.#renderClockMeta();
     }
 }
 

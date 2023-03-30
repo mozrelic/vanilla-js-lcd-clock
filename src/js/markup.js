@@ -36,6 +36,7 @@ class Markup {
 
     antePostMarkup() {
         return `
+        <div class="svg ante-post-svgs">
           <svg
             class="am"
             xmlns="http://www.w3.org/2000/svg"
@@ -64,6 +65,7 @@ c0,2.3,3.6,2.3,3.5,0c0,0,0-42.2,0-42.2C84.5,1,83.9,0.3,83.1,0.1z M33,7.4c2.3,0.1
 L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9,2.1l-9.9,20.8C37.5,39.1,36.8,39.3,36.1,39.4z"
             />
           </svg>
+        </div>
     `;
     }
 
@@ -166,7 +168,7 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
     `;
     }
 
-    settingsButton() {
+    settingsButtonMarkup() {
         return `
       <div class="modal-trigger">
         <button class="modal-button" type="modal-trigger-button" data-toggle="modal">            
@@ -179,7 +181,7 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
 
     weatherMarkup(data, iconData) {
         return `
-  <div class="weather">
+  <div class="weather svg">
   <div class="location-title">${data?.name || '--'}</div>
       <div class="temp">
     <div class="icon">
@@ -192,7 +194,7 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
                         : ''
             }-${iconData?.iconId || ''}"></i>
     </div>
-        <div class="svg temp-svg">
+        <div class="temp-svg">
 
         </div>
         <div class="icon">
