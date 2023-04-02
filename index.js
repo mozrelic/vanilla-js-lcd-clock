@@ -16,27 +16,12 @@ settings = {
     apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
 };
 
-// weatherSettings = {
-//     ...weatherSettings,
-//     zipcode: settings.zipcode,
-//     apiKey: settings.apiKey,
-// };
-
 ClockView.start({
     ...settings,
-    // target: '.clock-container',
-    // hour12: true,
-    // clockMeta: true,
-    // activeColor: 'oklch(85.29% 0.266 155.65)',
-    // activeColor: '#7921c6',
-    // inactiveColor: 'green',
 });
 
 WeatherView.start({
-    // zipcode: '97756',
-    // ...weatherSettings,
     ...settings,
-    // apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
 });
 
 modalHandler();

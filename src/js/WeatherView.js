@@ -40,9 +40,8 @@ class WeatherView {
 
             const options = {
                 baseURL,
-                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${
-                    this.#options.apiKey
-                }`,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
+                    }`,
                 timeout: 2000,
             };
 
@@ -117,8 +116,7 @@ class WeatherView {
             digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
             weatherIcon.setAttribute(
                 'class',
-                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
-                    data.iconData.iconId
+                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${data.iconData.iconId
                 }`
             );
             weatherDescription.innerText = data.weatherData.description;
