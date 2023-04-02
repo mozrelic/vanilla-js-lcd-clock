@@ -3,7 +3,7 @@ export function modalHandler() {
     const modalTrigger = document.querySelector('.modal-trigger');
     const buttonTrigger = document.querySelector('.modal-trigger button');
     const closeModal = document.querySelector('.close-modal');
-    console.log(modalTrigger);
+    // console.log(modalTrigger);
     modalTrigger.addEventListener('click', (e) => {
         if (!e.target) return;
         modalContainer.classList.remove('hidden');

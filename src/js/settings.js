@@ -1,8 +1,4 @@
-let currentState = {};
-
-let lastState = {};
-
-let defaultState = {
+export const defaultState = {
     target: '.clock-container',
     activeColor: '#c9d1d9',
     inactiveColor: '#262626',
@@ -11,5 +7,3 @@ let defaultState = {
     zipcode: '97756',
     apiKey: '',
 };
-
-export { currentState, lastState, defaultState };

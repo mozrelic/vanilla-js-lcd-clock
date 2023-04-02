@@ -8,8 +8,9 @@
  *
  */
 let settings;
+// import { currentState as settings, lastState } from './settings';
 
-export class FormHandler {
+class FormHandler {
     lastState = {};
     currentState = {};
 
@@ -24,7 +25,7 @@ export class FormHandler {
     init(data) {
         const fields = document.querySelectorAll('.setting');
         settings = { ...data };
-        console.log(settings);
+        // console.log(settings);
 
         fields.forEach((field) => {
             const attribute = field.getAttribute('data-type');
@@ -69,3 +70,4 @@ export class FormHandler {
         return settings;
     }
 }
+export default new FormHandler();

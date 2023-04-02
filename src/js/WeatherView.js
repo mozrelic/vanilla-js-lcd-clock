@@ -40,8 +40,9 @@ class WeatherView {
 
             const options = {
                 baseURL,
-                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
-                    }`,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${
+                    this.#options.apiKey
+                }`,
                 timeout: 2000,
             };
 
@@ -53,6 +54,7 @@ class WeatherView {
 
             spinner.classList.add('hidden');
             target.classList.add('show');
+            // console.table(data);
 
             return data;
         } catch (err) {
@@ -70,7 +72,7 @@ class WeatherView {
         target.insertAdjacentHTML('beforeend', markup.weatherMarkup());
 
         const digitTarget = document.querySelector('.temp-svg');
-        // console.log(digitTarget);
+
         digitTarget.insertAdjacentHTML('afterbegin', markup.digitMarkup());
     }
 
@@ -95,7 +97,6 @@ class WeatherView {
 
             return cleanData;
         } catch (err) {
-            // console.log(err);
             return err;
         }
     }
@@ -105,7 +106,6 @@ class WeatherView {
 
         try {
             const data = await this.#updateWeather();
-            // console.log(data);
 
             const digitTarget = document.querySelector('.temp-svg');
             const locationTitle = document.querySelector('.location-title');
@@ -117,40 +117,29 @@ class WeatherView {
             digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
             weatherIcon.setAttribute(
                 'class',
-                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${data.iconData.iconId
+                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
+                    data.iconData.iconId
                 }`
             );
             weatherDescription.innerText = data.weatherData.description;
             locationTitle.innerText = data.weatherData.name;
         } catch (err) {
-            console.log(err);
             return err;
         }
     }
+
     #stop(err) {
         clearInterval(this.#timeInterval);
         console.log(err);
         return;
     }
-
-    // start(userOptions) {
-    //     this.#options = { ...userOptions };
-    //     this.#init();
-    //     this.#renderWeatherUpdates();
-    //     console.log(this.#renderWeatherUpdates);
-    //
-    //     this.#timeInterval = setInterval(
-    //         () =>
-    //             this.#renderWeatherUpdates().catch((err) => {
-    //                 console.log(err);
-    //                 this.#stop(err);
-    //                 return;
-    //             }),
-    //         1000 * 3
-    //     );
-    // }
-    async start(userOptions) {
+    updateOptions(userOptions) {
         this.#options = { ...userOptions };
+        console.log(userOptions);
+    }
+
+    async start(userOptions) {
+        this.updateOptions(userOptions);
         try {
             this.#init();
             await this.#renderWeatherUpdates();

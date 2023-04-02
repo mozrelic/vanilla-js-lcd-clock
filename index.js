@@ -1,15 +1,26 @@
-('use strict');
+// ('use strict');
 
 import './index.scss';
 import ClockView from './src/js/ClockView';
 import WeatherView from './src/js/WeatherView';
+import FormHandler from './src/js/FormHandler';
 import { modalHandler } from './src/js/helpers/modal';
-import { FormHandler } from './src/js/form';
+import { defaultState } from './src/js/settings';
 
 let settings;
-const defaultOptions = ClockView.defaultOptions;
 
-settings = { ...defaultOptions, ...settings, hour12: true };
+settings = {
+    ...defaultState,
+    ...settings,
+    hour12: true,
+    apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
+};
+
+// weatherSettings = {
+//     ...weatherSettings,
+//     zipcode: settings.zipcode,
+//     apiKey: settings.apiKey,
+// };
 
 ClockView.start({
     ...settings,
@@ -22,28 +33,29 @@ ClockView.start({
 });
 
 WeatherView.start({
-    zipcode: '97756',
-    apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
+    // zipcode: '97756',
+    // ...weatherSettings,
+    ...settings,
+    // apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
 });
 
 modalHandler();
 
-const SettingsForm = new FormHandler();
+const formTarget = document.querySelector('.settings');
 
-const form = document.querySelector('.settings');
-
-SettingsForm.init(settings);
+FormHandler.init(settings);
 ClockView.setOptions(settings);
 
-form.addEventListener('input', (e) => {
+formTarget.addEventListener('input', (e) => {
     const target = e.target.closest('.setting');
 
-    SettingsForm.handleChange(target);
-    settings = SettingsForm.returnState();
+    FormHandler.handleChange(target);
+    settings = FormHandler.returnState();
 
     // console.log('settings from index.js', settings);
     ClockView.setOptions(settings);
     ClockView.rerenderUpdatedOptions();
+    WeatherView.updateOptions(settings);
 });
 
 const slideIn = document.querySelectorAll('.svg');
