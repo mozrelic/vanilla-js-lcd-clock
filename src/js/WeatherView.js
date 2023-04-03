@@ -4,6 +4,14 @@ import markup from './markup';
 // TODO:
 //
 
+function errorHandler(target, message) {
+    if (!target && !message) return;
+    const newElement = document.createElement('p').addClass('error');
+    const newText = document.createTextNode(message);
+    newElement.appendChild(newText);
+    target.insertAdjacentHTML('beforebegin', newElement);
+}
+
 class WeatherView {
     #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
     #options;
@@ -11,9 +19,8 @@ class WeatherView {
 
     async #getGeo() {
         const baseURL = this.#BASE_URL_WEATHER;
+        const { zipcode, apiKey } = this.#options;
         try {
-            const { zipcode, apiKey } = this.#options;
-
             const options = {
                 baseURL,
                 url: `geo/1.0/zip?zip=${zipcode}&appid=${apiKey}`,
@@ -23,8 +30,22 @@ class WeatherView {
             const data = response.data;
 
             return data;
-        } catch (error) {
-            console.error(error);
+        } catch (err) {
+            // throw new Error('zipcode might be wrong', err.message);
+            if (err.response.status === 404) {
+                console.error(
+                    `Zipcode is probably wrong : ${zipcode}`,
+                    err.response
+                );
+            }
+            if (err.response.status === 401) {
+                console.error(
+                    `API Key probably is wrong or api is down : ${apiKey}`,
+                    err.message
+                );
+            }
+            // console.log(err);
+            return err;
         }
     }
 
@@ -36,6 +57,9 @@ class WeatherView {
 
         try {
             const locationData = await this.#getGeo();
+            if (!locationData) {
+                return;
+            }
             const { lat, lon } = locationData;
 
             const options = {
@@ -57,7 +81,8 @@ class WeatherView {
 
             return data;
         } catch (err) {
-            // console.log(err);
+            // console.error(err.message);
+
             spinner.classList.add('hidden');
             target.classList.add('show');
             return err;
@@ -96,6 +121,7 @@ class WeatherView {
 
             return cleanData;
         } catch (err) {
+            // console.log(err);
             return err;
         }
     }
@@ -121,19 +147,28 @@ class WeatherView {
             );
             weatherDescription.innerText = data.weatherData.description;
             locationTitle.innerText = data.weatherData.name;
+            // console.log(daat);
         } catch (err) {
+            if (err.response === 'undefined') {
+                console.log('error on startup, resuming setInterval');
+            } else {
+                clearInterval(this.#timeInterval);
+                console.error(
+                    'data.weather could not be found, Stopping setInterval.'
+                );
+            }
+            // console.log(err);
             return err;
         }
     }
 
-    #stop(err) {
-        clearInterval(this.#timeInterval);
-        console.log(err);
-        return;
-    }
+    // #stop(err) {
+    //     clearInterval(this.#timeInterval);
+    //     // console.log(err);
+    //     return;
+    // }
     updateOptions(userOptions) {
         this.#options = { ...userOptions };
-        console.log(userOptions);
     }
 
     async start(userOptions) {
@@ -148,7 +183,6 @@ class WeatherView {
             );
         } catch (err) {
             console.log(err);
-            this.#stop(err);
         }
     }
 }

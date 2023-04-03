@@ -14,6 +14,7 @@ settings = {
     ...settings,
     hour12: true,
     apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
+    zipcode: '97756',
 };
 
 ClockView.start({
@@ -38,6 +39,7 @@ formTarget.addEventListener('input', (e) => {
     settings = FormHandler.returnState();
 
     // console.log('settings from index.js', settings);
+
     ClockView.setOptions(settings);
     ClockView.rerenderUpdatedOptions();
     WeatherView.updateOptions(settings);
