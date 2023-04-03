@@ -4,18 +4,45 @@ import markup from './markup';
 // TODO:
 //
 
-function errorHandler(target, message) {
+let serverResponses;
+
+function errorHandler(target, message, err) {
     if (!target && !message) return;
-    const newElement = document.createElement('p').addClass('error');
-    const newText = document.createTextNode(message);
-    newElement.appendChild(newText);
-    target.insertAdjacentHTML('beforebegin', newElement);
+    const errorElement = `<p class="error-msg">${message}</p>`;
+    const formElements = [...document.querySelectorAll('.setting')];
+    console.log(err);
+
+    // console.log(serverResponses);
+    // trying to remove error msg if the err property is empty and an error-msg exists
+    formElements.forEach((el) => {
+        const errElements = [...document.querySelectorAll('.error-msg')];
+        errElements.forEach((el) => {
+            if (!err.response.status) {
+                //
+                console.log(el);
+                el.remove();
+            }
+        });
+
+        const formElAttribute = el.getAttribute('data-type');
+        if (formElAttribute === target) {
+            const guard = document.querySelector('.error-msg');
+
+            if (!guard) {
+                const el = document.querySelector(
+                    `[data-type="${formElAttribute}"]`
+                );
+                el.insertAdjacentHTML('beforebegin', errorElement);
+            }
+        }
+    });
 }
 
 class WeatherView {
     #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
     #options;
     #timeInterval;
+    #intervalRunning = false;
 
     async #getGeo() {
         const baseURL = this.#BASE_URL_WEATHER;
@@ -27,11 +54,21 @@ class WeatherView {
                 timeout: 2000,
             };
             const response = await axios(options);
+            // console.log(response.status);
+            serverResponses = {
+                ...serverResponses,
+                geo: response.status,
+            };
             const data = response.data;
 
             return data;
         } catch (err) {
-            // throw new Error('zipcode might be wrong', err.message);
+            // If an error occured with either the api key or the zipcode, setInterval will be cleared
+            // I think this needs to happen here, as oppsed to the other weather methods, because this
+            // is the first time we try to connect to the api
+            clearInterval(this.#timeInterval);
+            this.#intervalRunning = false;
+
             if (err.response.status === 404) {
                 console.error(
                     `Zipcode is probably wrong : ${zipcode}`,
@@ -39,6 +76,8 @@ class WeatherView {
                 );
             }
             if (err.response.status === 401) {
+                errorHandler('apiKey', err.message, err);
+
                 console.error(
                     `API Key probably is wrong or api is down : ${apiKey}`,
                     err.message
@@ -73,11 +112,10 @@ class WeatherView {
 
             if (response.statusText !== 'OK') return;
             const { data } = response;
-            // console.log(data);
 
             spinner.classList.add('hidden');
             target.classList.add('show');
-            // console.table(data);
+            console.log(data);
 
             return data;
         } catch (err) {
@@ -149,40 +187,35 @@ class WeatherView {
             locationTitle.innerText = data.weatherData.name;
             // console.log(daat);
         } catch (err) {
-            if (err.response === 'undefined') {
-                console.log('error on startup, resuming setInterval');
-            } else {
-                clearInterval(this.#timeInterval);
-                console.error(
-                    'data.weather could not be found, Stopping setInterval.'
-                );
-            }
-            // console.log(err);
             return err;
         }
     }
+    #startInterval(bool) {
+        if (this.#intervalRunning === false) {
+            this.#timeInterval = setInterval(
+                async () => await this.#renderWeatherUpdates(),
+                1000 * 3
+            );
+            this.#intervalRunning = bool;
+        }
+    }
 
-    // #stop(err) {
-    //     clearInterval(this.#timeInterval);
-    //     // console.log(err);
-    //     return;
-    // }
     updateOptions(userOptions) {
         this.#options = { ...userOptions };
+        this.#startInterval();
     }
 
     async start(userOptions) {
         this.updateOptions(userOptions);
         try {
             this.#init();
-            await this.#renderWeatherUpdates();
+            const data = await this.#renderWeatherUpdates();
+            console.log(data);
 
-            this.#timeInterval = setInterval(
-                async () => await this.#renderWeatherUpdates(),
-                1000 * 3
-            );
+            this.#startInterval(true);
         } catch (err) {
             console.log(err);
+            return err;
         }
     }
 }
