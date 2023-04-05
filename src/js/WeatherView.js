@@ -4,40 +4,6 @@ import markup from './markup';
 // TODO:
 //
 
-let serverResponses;
-
-function errorHandler(target, message, err) {
-    if (!target && !message) return;
-    const errorElement = `<p class="error-msg">${message}</p>`;
-    const formElements = [...document.querySelectorAll('.setting')];
-    console.log(err);
-
-    // console.log(serverResponses);
-    // trying to remove error msg if the err property is empty and an error-msg exists
-    formElements.forEach((el) => {
-        const errElements = [...document.querySelectorAll('.error-msg')];
-        errElements.forEach((el) => {
-            if (!err.response.status) {
-                //
-                console.log(el);
-                el.remove();
-            }
-        });
-
-        const formElAttribute = el.getAttribute('data-type');
-        if (formElAttribute === target) {
-            const guard = document.querySelector('.error-msg');
-
-            if (!guard) {
-                const el = document.querySelector(
-                    `[data-type="${formElAttribute}"]`
-                );
-                el.insertAdjacentHTML('beforebegin', errorElement);
-            }
-        }
-    });
-}
-
 class WeatherView {
     #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
     #options;
@@ -54,11 +20,6 @@ class WeatherView {
                 timeout: 2000,
             };
             const response = await axios(options);
-            // console.log(response.status);
-            serverResponses = {
-                ...serverResponses,
-                geo: response.status,
-            };
             const data = response.data;
 
             return data;
@@ -66,8 +27,9 @@ class WeatherView {
             // If an error occured with either the api key or the zipcode, setInterval will be cleared
             // I think this needs to happen here, as oppsed to the other weather methods, because this
             // is the first time we try to connect to the api
-            clearInterval(this.#timeInterval);
-            this.#intervalRunning = false;
+            // clearInterval(this.#timeInterval);
+            // this.#intervalRunning = false;
+            this.#stopInterval();
 
             if (err.response.status === 404) {
                 console.error(
@@ -76,8 +38,6 @@ class WeatherView {
                 );
             }
             if (err.response.status === 401) {
-                errorHandler('apiKey', err.message, err);
-
                 console.error(
                     `API Key probably is wrong or api is down : ${apiKey}`,
                     err.message
@@ -88,14 +48,15 @@ class WeatherView {
         }
     }
 
-    async #getWeather() {
+    async #getWeather(geoData) {
         const target = document.querySelector('.weather-container');
         const spinner = document.querySelector('.lds-ring');
 
         const baseURL = this.#BASE_URL_WEATHER;
 
         try {
-            const locationData = await this.#getGeo();
+            const locationData = geoData;
+            // console.log(geoData);
             if (!locationData) {
                 return;
             }
@@ -115,7 +76,7 @@ class WeatherView {
 
             spinner.classList.add('hidden');
             target.classList.add('show');
-            console.log(data);
+            // console.log(data);
 
             return data;
         } catch (err) {
@@ -138,9 +99,9 @@ class WeatherView {
         digitTarget.insertAdjacentHTML('afterbegin', markup.digitMarkup());
     }
 
-    async #updateWeather() {
+    async #updateWeather(weatherData) {
         try {
-            const data = await this.#getWeather();
+            const data = weatherData;
 
             const cleanData = {
                 weatherData: {
@@ -164,11 +125,11 @@ class WeatherView {
         }
     }
 
-    async #renderWeatherUpdates() {
+    async #renderWeatherUpdates(cleanWeatherData) {
         const weatherDescription = document.querySelector('.description');
 
         try {
-            const data = await this.#updateWeather();
+            const data = cleanWeatherData;
 
             const digitTarget = document.querySelector('.temp-svg');
             const locationTitle = document.querySelector('.location-title');
@@ -185,7 +146,6 @@ class WeatherView {
             );
             weatherDescription.innerText = data.weatherData.description;
             locationTitle.innerText = data.weatherData.name;
-            // console.log(daat);
         } catch (err) {
             return err;
         }
@@ -193,29 +153,81 @@ class WeatherView {
     #startInterval(bool) {
         if (this.#intervalRunning === false) {
             this.#timeInterval = setInterval(
-                async () => await this.#renderWeatherUpdates(),
+                async () => await this.#weather(),
                 1000 * 3
             );
             this.#intervalRunning = bool;
         }
     }
+    #stopInterval() {
+        clearInterval(this.#timeInterval);
+        this.#intervalRunning = false;
+    }
 
     updateOptions(userOptions) {
         this.#options = { ...userOptions };
-        this.#startInterval();
+        this.#startInterval(true);
+    }
+    async #weather() {
+        try {
+            const geoData = await this.#getGeo();
+            this.#apiErrorHandler(geoData);
+
+            const weatherData = await this.#getWeather(geoData);
+            const cleanWeatherData = await this.#updateWeather(weatherData);
+            await this.#renderWeatherUpdates(cleanWeatherData);
+        } catch (err) {
+            // console.log(err);
+            return err;
+        }
+    }
+    #apiErrorHandler(data) {
+        console.log(data);
+        const apiKeyContainer = document.querySelector('.api-key-container');
+        const zipcodeContainer = document.querySelector('.zipcode-container');
+        const errEl1 = apiKeyContainer.querySelector('.error-msg.apiKey');
+        const errEl2 = zipcodeContainer.querySelector('.error-msg.zipcode');
+        const weatherContainer = document.querySelector('.weather');
+
+        console.log(apiKeyContainer.children.length);
+        if (apiKeyContainer.children.length > 1) errEl1.remove();
+
+        if (zipcodeContainer.children.length > 1) errEl2.remove();
+
+        if (!data.response) return;
+        const { status } = data.response;
+        const { message } = data.response.data;
+
+        const errorElement = `<p class="error-msg ${status === 401 ? 'apiKey' : status === 404 ? 'zipcode' : ''
+            }">${message}</p>`;
+
+        if (status === 401) {
+            const target = apiKeyContainer;
+            const guard = document.querySelector('.apiKey');
+            if (!guard) target.insertAdjacentHTML('afterbegin', errorElement);
+            weatherContainer.remove();
+            this.#init();
+        }
+
+        if (status === 404) {
+            const target = zipcodeContainer;
+            const guard = document.querySelector('.zipcode');
+            if (!guard) target.insertAdjacentHTML('afterbegin', errorElement);
+            weatherContainer.remove();
+            this.#init();
+        }
     }
 
     async start(userOptions) {
         this.updateOptions(userOptions);
         try {
             this.#init();
-            const data = await this.#renderWeatherUpdates();
-            console.log(data);
+
+            await this.#weather();
 
             this.#startInterval(true);
         } catch (err) {
             console.log(err);
-            return err;
         }
     }
 }
