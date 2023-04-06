@@ -6,6 +6,7 @@ import WeatherView from './src/js/WeatherView';
 import FormHandler from './src/js/FormHandler';
 import { modalHandler } from './src/js/helpers/modal';
 import { defaultState } from './src/js/settings';
+import { slideIn } from './src/js/helpers/slideIn';
 
 let settings;
 
@@ -24,7 +25,6 @@ ClockView.start({
 WeatherView.start({
     ...settings,
 });
-
 modalHandler();
 
 const formTarget = document.querySelector('.settings');
@@ -45,11 +45,4 @@ formTarget.addEventListener('input', (e) => {
     WeatherView.updateOptions(settings);
 });
 
-const slideIn = document.querySelectorAll('.svg');
-
-slideIn.forEach((el) => {
-    el.classList.add('slideIn');
-    setTimeout(() => {
-        el.classList.remove('slideIn');
-    }, 3200);
-});
+slideIn('.svg');

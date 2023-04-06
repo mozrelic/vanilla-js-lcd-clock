@@ -54,6 +54,54 @@ textarea {
         justify-content: center;
         max-width: 250px;
     }
+    .weather-settings {
+        .api-key-container {
+            &.error {
+                &:after {
+                    background-color: var(--error-color-red);
+                }
+            }
+            &:after {
+                display: block;
+                content: '';
+                position: absolute;
+                top: 6px;
+                right: 1px;
+                width: 0.3rem;
+                height: 0.3rem;
+                border-radius: 5px;
+                background-color: var(--error-color-green);
+            }
+        }
+        .zipcode-container {
+            &.error {
+                &:after {
+                    background-color: var(--error-color-red);
+                }
+            }
+            &:after {
+                display: block;
+                content: '';
+                position: absolute;
+                top: 6px;
+                right: 4px;
+                width: 0.3rem;
+                height: 0.3rem;
+                border-radius: 5px;
+                background-color: var(--error-color-green);
+            }
+        }
+
+        .column {
+            justify-content: start;
+        }
+        .error-msg {
+            color: var(--error-color-red);
+            line-height: 1.1rem;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+    }
     .weather-settings,
     .clock-settings {
         margin-top: 4rem;
@@ -118,6 +166,7 @@ textarea {
         gap: 2rem;
         .inner-container {
             position: relative;
+            width: 100%;
         }
 
         input,
