@@ -7,12 +7,13 @@
  *
  *
  */
-let settings;
+// let settings;
 // import { currentState as settings, lastState } from './settings';
 
 class FormHandler {
     lastState = {};
     currentState = {};
+    settings = {};
 
     handleError(attribute, value) {
         const reg = /^#([0-9a-f]{3}){1,2}$/i;
@@ -24,20 +25,20 @@ class FormHandler {
 
     init(data) {
         const fields = document.querySelectorAll('.setting');
-        settings = { ...data };
+        this.settings = { ...data };
         // console.log(settings);
 
         fields.forEach((field) => {
             const attribute = field.getAttribute('data-type');
 
             if (!field.classList.contains('checkbox'))
-                field.value = settings[attribute];
+                field.value = this.settings[attribute];
 
             if (
                 field.getAttribute('data-type') === 'clockMeta' ||
                 field.getAttribute('data-type') === 'hour12'
             ) {
-                field.checked = Boolean(settings[attribute]);
+                field.checked = Boolean(this.settings[attribute]);
             }
         });
     }
@@ -60,14 +61,14 @@ class FormHandler {
     }
 
     #updateSettings() {
-        settings = {
-            ...settings,
+        this.settings = {
+            ...this.settings,
             ...this.currentState,
         };
     }
 
     returnState() {
-        return settings;
+        return this.settings;
     }
 }
 export default new FormHandler();
