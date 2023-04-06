@@ -1,5 +1,6 @@
 import axios from 'axios';
 import markup from './markup';
+import { slideIn } from './helpers/slideIn';
 
 // TODO:
 //
@@ -27,8 +28,6 @@ class WeatherView {
             // If an error occured with either the api key or the zipcode, setInterval will be cleared
             // I think this needs to happen here, as oppsed to the other weather methods, because this
             // is the first time we try to connect to the api
-            // clearInterval(this.#timeInterval);
-            // this.#intervalRunning = false;
             this.#stopInterval();
 
             if (err.response.status === 404) {
@@ -64,8 +63,9 @@ class WeatherView {
 
             const options = {
                 baseURL,
-                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
-                    }`,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${
+                    this.#options.apiKey
+                }`,
                 timeout: 2000,
             };
 
@@ -88,7 +88,7 @@ class WeatherView {
         }
     }
 
-    #init() {
+    #initRender() {
         const target = document.querySelector('.weather-container');
 
         target.insertAdjacentHTML('afterbegin', markup.loadingSpinnerMarkup());
@@ -141,7 +141,8 @@ class WeatherView {
             digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
             weatherIcon.setAttribute(
                 'class',
-                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${data.iconData.iconId
+                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
+                    data.iconData.iconId
                 }`
             );
             weatherDescription.innerText = data.weatherData.description;
@@ -151,6 +152,7 @@ class WeatherView {
         }
     }
     #startInterval(bool) {
+        this.#weather();
         if (this.#intervalRunning === false) {
             this.#timeInterval = setInterval(
                 async () => await this.#weather(),
@@ -181,6 +183,7 @@ class WeatherView {
             return err;
         }
     }
+
     #apiErrorHandler(data) {
         console.log(data);
         const apiKeyContainer = document.querySelector('.api-key-container');
@@ -189,42 +192,53 @@ class WeatherView {
         const errEl2 = zipcodeContainer.querySelector('.error-msg.zipcode');
         const weatherContainer = document.querySelector('.weather');
 
-        console.log(apiKeyContainer.children.length);
-        if (apiKeyContainer.children.length > 1) errEl1.remove();
+        if (apiKeyContainer.children.length > 1) {
+            apiKeyContainer.classList.remove('error');
+            errEl1.remove();
+        }
 
-        if (zipcodeContainer.children.length > 1) errEl2.remove();
+        if (zipcodeContainer.children.length > 1) {
+            zipcodeContainer.classList.remove('error');
+
+            errEl2.remove();
+        }
 
         if (!data.response) return;
         const { status } = data.response;
         const { message } = data.response.data;
 
-        const errorElement = `<p class="error-msg ${status === 401 ? 'apiKey' : status === 404 ? 'zipcode' : ''
-            }">${message}</p>`;
+        const errorElement = `<p class="error-msg ${
+            status === 401
+                ? 'apiKey'
+                : status === 404 || status === 400
+                ? 'zipcode'
+                : ''
+        }">${message}</p>`;
+
+        // chose an arrow function here because needed access to the outer this for this.#initRender()
+        const handleError = (targetClass, parentContainer) => {
+            const guard = document.querySelector(targetClass);
+            if (!guard)
+                parentContainer.insertAdjacentHTML('beforeend', errorElement);
+            parentContainer.classList.add('error');
+            weatherContainer.remove();
+            this.#initRender();
+        };
 
         if (status === 401) {
-            const target = apiKeyContainer;
-            const guard = document.querySelector('.apiKey');
-            if (!guard) target.insertAdjacentHTML('afterbegin', errorElement);
-            weatherContainer.remove();
-            this.#init();
+            handleError('.apiKey', apiKeyContainer);
         }
 
-        if (status === 404) {
-            const target = zipcodeContainer;
-            const guard = document.querySelector('.zipcode');
-            if (!guard) target.insertAdjacentHTML('afterbegin', errorElement);
-            weatherContainer.remove();
-            this.#init();
+        if (status === 404 || status === 400) {
+            handleError('.zipcode', zipcodeContainer);
         }
+        if (status !== 200) slideIn('.error-msg');
     }
 
     async start(userOptions) {
         this.updateOptions(userOptions);
         try {
-            this.#init();
-
-            await this.#weather();
-
+            this.#initRender();
             this.#startInterval(true);
         } catch (err) {
             console.log(err);
