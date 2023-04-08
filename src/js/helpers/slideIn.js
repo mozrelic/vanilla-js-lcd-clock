@@ -1,3 +1,5 @@
+'use strict';
+
 export function slideIn(target) {
     const slideIn = document.querySelectorAll(target);
     // console.log(slideIn);
