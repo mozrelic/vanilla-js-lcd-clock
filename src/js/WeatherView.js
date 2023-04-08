@@ -25,23 +25,6 @@ class WeatherView {
 
             return data;
         } catch (err) {
-            // If an error occured with either the api key or the zipcode, setInterval will be cleared
-            // I think this needs to happen here, as oppsed to the other weather methods, because this
-            // is the first time we try to connect to the api
-            this.#stopInterval();
-
-            if (err.response.status === 404) {
-                console.error(
-                    `Zipcode is probably wrong : ${zipcode}`,
-                    err.response
-                );
-            }
-            if (err.response.status === 401) {
-                console.error(
-                    `API Key probably is wrong or api is down : ${apiKey}`,
-                    err.message
-                );
-            }
             // console.log(err);
             return err;
         }
@@ -56,9 +39,9 @@ class WeatherView {
         try {
             const locationData = geoData;
             // console.log(geoData);
-            if (!locationData) {
-                return;
-            }
+            // if (!locationData) {
+            //     return;
+            // }
             const { lat, lon } = locationData;
 
             const options = {
@@ -100,67 +83,60 @@ class WeatherView {
     }
 
     async #updateWeather(weatherData) {
-        try {
-            const data = weatherData;
+        const data = weatherData;
 
-            const cleanData = {
-                weatherData: {
-                    name: data.name,
-                    description: data.weather[0].description,
-                    temp: {
-                        val1: data.main.temp.toString().split('').slice(0, 1),
-                        val2: data.main.temp.toString().split('').slice(1, 2),
-                    },
+        const cleanData = {
+            weatherData: {
+                name: data.name,
+                description: data.weather[0].description,
+                temp: {
+                    val1: data.main.temp.toString().split('').slice(0, 1),
+                    val2: data.main.temp.toString().split('').slice(1, 2),
                 },
-                iconData: {
-                    icon: data.weather[0].icon.at(-1),
-                    iconId: data.weather[0].id,
-                },
-            };
+            },
+            iconData: {
+                icon: data.weather[0].icon.at(-1),
+                iconId: data.weather[0].id,
+            },
+        };
 
-            return cleanData;
-        } catch (err) {
-            // console.log(err);
-            return err;
-        }
+        return cleanData;
     }
 
     async #renderWeatherUpdates(cleanWeatherData) {
         const weatherDescription = document.querySelector('.description');
 
-        try {
-            const data = cleanWeatherData;
+        const data = cleanWeatherData;
 
-            const digitTarget = document.querySelector('.temp-svg');
-            const locationTitle = document.querySelector('.location-title');
-            const weatherIcon = document.querySelector('.icon i');
+        const digitTarget = document.querySelector('.temp-svg');
+        const locationTitle = document.querySelector('.location-title');
+        const weatherIcon = document.querySelector('.icon i');
 
-            const { 0: digitOne, 1: digitTwo } = digitTarget.children;
+        const { 0: digitOne, 1: digitTwo } = digitTarget.children;
 
-            digitOne.setAttribute('class', `num-${data.weatherData.temp.val1}`);
-            digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
-            weatherIcon.setAttribute(
-                'class',
-                `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
-                    data.iconData.iconId
-                }`
-            );
-            weatherDescription.innerText = data.weatherData.description;
-            locationTitle.innerText = data.weatherData.name;
-        } catch (err) {
-            return err;
-        }
+        digitOne.setAttribute('class', `num-${data.weatherData.temp.val1}`);
+        digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
+        weatherIcon.setAttribute(
+            'class',
+            `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
+                data.iconData.iconId
+            }`
+        );
+        weatherDescription.innerText = data.weatherData.description;
+        locationTitle.innerText = data.weatherData.name;
     }
+
     #startInterval(bool) {
         this.#weather();
         if (this.#intervalRunning === false) {
             this.#timeInterval = setInterval(
                 async () => await this.#weather(),
-                1000 * 3
+                1000 * 9
             );
             this.#intervalRunning = bool;
         }
     }
+
     #stopInterval() {
         clearInterval(this.#timeInterval);
         this.#intervalRunning = false;
@@ -170,6 +146,7 @@ class WeatherView {
         this.#options = { ...userOptions };
         this.#startInterval(true);
     }
+
     async #weather() {
         try {
             const geoData = await this.#getGeo();
@@ -186,11 +163,11 @@ class WeatherView {
 
     #apiErrorHandler(data) {
         console.log(data);
-        const apiKeyContainer = document.querySelector('.api-key-container');
-        const zipcodeContainer = document.querySelector('.zipcode-container');
-        const errEl1 = apiKeyContainer.querySelector('.error-msg.apiKey');
-        const errEl2 = zipcodeContainer.querySelector('.error-msg.zipcode');
-        const weatherContainer = document.querySelector('.weather');
+        const apiKeyContainer = document.querySelector('.api-key-container'),
+            zipcodeContainer = document.querySelector('.zipcode-container'),
+            errEl1 = apiKeyContainer.querySelector('.error-msg.apiKey'),
+            errEl2 = zipcodeContainer.querySelector('.error-msg.zipcode'),
+            weatherContainer = document.querySelector('.weather');
 
         if (apiKeyContainer.children.length > 1) {
             apiKeyContainer.classList.remove('error');
@@ -199,7 +176,6 @@ class WeatherView {
 
         if (zipcodeContainer.children.length > 1) {
             zipcodeContainer.classList.remove('error');
-
             errEl2.remove();
         }
 
@@ -215,6 +191,9 @@ class WeatherView {
                 : ''
         }">${message}</p>`;
 
+        // in all instances of error, we want to stop our setInterval, so we call this here.
+        this.#stopInterval();
+
         // chose an arrow function here because needed access to the outer this for this.#initRender()
         const handleError = (targetClass, parentContainer) => {
             const guard = document.querySelector(targetClass);
@@ -227,10 +206,18 @@ class WeatherView {
 
         if (status === 401) {
             handleError('.apiKey', apiKeyContainer);
+            console.error(
+                `API Key probably is wrong or api is down : `,
+                data?.response.statusText
+            );
         }
 
         if (status === 404 || status === 400) {
             handleError('.zipcode', zipcodeContainer);
+            console.error(
+                `Zipcode is probably wrong : `,
+                data?.response.statusText
+            );
         }
         if (status !== 200) slideIn('.error-msg');
     }
