@@ -5,7 +5,8 @@
     flex-direction: column;
     text-align: center;
     &-container {
-        margin: 6rem;
+        margin: 5% 5% 8% 5%;
+        max-width: 25%;
     }
     .icon,
     .temp {
@@ -19,8 +20,8 @@
     .temp {
         display: flex;
         position: relative;
-        width: 200%;
-        padding: 2rem 0;
+        width: 100%;
+        padding: 10% 0;
         font-size: 4.5rem;
         align-self: center;
         max-width: 200px;
@@ -28,16 +29,16 @@
         gap: 1rem;
     }
     .location-title {
-        font-size: 2.4rem;
+        font-size: clamp(1.2rem, 2.2vw, 3rem);
         font-weight: var(--font-bold);
     }
     .icon {
         i {
-            font-size: 1.4rem;
+            font-size: clamp(1rem, 2vw, 2rem);
         }
     }
     .description {
-        font-size: 2rem;
+        font-size: clamp(1.2rem, 2.2vw, 3rem);
         font-weight: var(--font-bold);
         text-transform: capitalize;
     }

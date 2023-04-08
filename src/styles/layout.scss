@@ -59,6 +59,8 @@ body {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
+        width: 15%;
+        // max-width: 60px;
         svg {
             display: block;
             max-width: calc(var(--clock-face-width) / 15);
