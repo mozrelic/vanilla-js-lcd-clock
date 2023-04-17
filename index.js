@@ -1,6 +1,7 @@
-// ('use strict');
+'use strict';
 
 import './index.scss';
+import store from 'store';
 import ClockView from './src/js/ClockView';
 import WeatherView from './src/js/WeatherView';
 import FormHandler from './src/js/FormHandler';
@@ -18,31 +19,43 @@ settings = {
     zipcode: '97756',
 };
 
-ClockView.start({
+let localStorageSettings = {
+    ...defaultState,
     ...settings,
+    ...store.get('settings'),
+};
+
+ClockView.start({
+    ...localStorageSettings,
 });
 
 WeatherView.start({
-    ...settings,
+    ...localStorageSettings,
 });
 modalHandler();
 
 const formTarget = document.querySelector('.settings');
 
-FormHandler.init(settings);
-ClockView.setOptions(settings);
+// store.clearAll();
+
+FormHandler.init(localStorageSettings);
+ClockView.setOptions(localStorageSettings);
 
 formTarget.addEventListener('input', (e) => {
     const target = e.target.closest('.setting');
 
     FormHandler.handleChange(target);
     settings = FormHandler.returnState();
-
-    // console.log('settings from index.js', settings);
+    store.set('settings', settings);
 
     ClockView.setOptions(settings);
     ClockView.rerenderUpdatedOptions();
-    WeatherView.updateOptions(settings);
+    if (
+        target.classList.contains('set-api-key') ||
+        target.classList.contains('set-zipcode')
+    ) {
+        WeatherView.updateOptions(settings);
+    }
 });
 
 slideIn('.svg');

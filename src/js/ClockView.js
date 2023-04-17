@@ -61,6 +61,7 @@ class ClockView extends ClockClassTemplate {
         const target = this.target.querySelector('.clock-meta-container');
         // this is a different way of spreading the target children into a new variable
         // const metaTargetArr = Object.values(target.children);
+        if (!target) return;
         const metaTargetArr = [...target.children];
         let segmentGuard = metaTargetArr[0].children[1];
 
@@ -106,19 +107,22 @@ class ClockView extends ClockClassTemplate {
     }
 
     #destroyElement(targetEl) {
-        const elementGuard = [
-            ...this.target.querySelector(`${targetEl}`).children,
-        ];
-        if (elementGuard.length > 0) {
+        const target = document.querySelector(`${targetEl}`);
+        if (!target) return;
+        const elementGuard = [...target.children];
+        if (elementGuard.length >= 0) {
             elementGuard.forEach((element) => {
                 element.remove();
             });
+            // target.remove();
         }
+        // target.remove();
     }
 
     #setAntePost(timeObj) {
         if (this.options.hour12 === false || !this.options.hour12) return;
         const antePostEl = this.target.querySelector('.ante-post-svgs');
+        if (!antePostEl) return;
         // get children elements of am-pm parent container
         const { 0: amEl, 1: pmEl } = antePostEl.children;
 
@@ -196,9 +200,17 @@ class ClockView extends ClockClassTemplate {
         if (!this.options.hour12 || this.options.hour12 === false) return;
 
         const target = this.target.querySelector('.am-pm');
+        const guard = this.target.querySelector('.ante-post-svgs');
         const antePostMarkup = markup.antePostMarkup();
 
-        target.insertAdjacentHTML('afterbegin', antePostMarkup);
+        // had to add this guard because when we destroyElement in the rerenderUpdatedOptions method, we were getting an
+        // empty ante-post-svgs div each time the show 12 hour option is toggled on and off.
+        if (guard) {
+            guard.remove();
+            target.insertAdjacentHTML('afterbegin', antePostMarkup);
+        } else {
+            target.insertAdjacentHTML('afterbegin', antePostMarkup);
+        }
     }
 
     #renderClockMeta() {

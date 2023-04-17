@@ -38,32 +38,25 @@ class WeatherView {
 
         try {
             const locationData = geoData;
-            // console.log(geoData);
-            // if (!locationData) {
-            //     return;
-            // }
             const { lat, lon } = locationData;
 
             const options = {
                 baseURL,
-                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${
-                    this.#options.apiKey
-                }`,
+                url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
+                    }`,
                 timeout: 2000,
             };
 
             const response = await axios(options);
 
-            if (response.statusText !== 'OK') return;
             const { data } = response;
 
             spinner.classList.add('hidden');
             target.classList.add('show');
-            // console.log(data);
 
             return data;
         } catch (err) {
-            // console.error(err.message);
+            console.log(err);
 
             spinner.classList.add('hidden');
             target.classList.add('show');
@@ -73,8 +66,14 @@ class WeatherView {
 
     #initRender() {
         const target = document.querySelector('.weather-container');
+        const spinner = document.querySelector('.lds-ring');
 
-        target.insertAdjacentHTML('afterbegin', markup.loadingSpinnerMarkup());
+        if (!spinner) {
+            target.insertAdjacentHTML(
+                'afterbegin',
+                markup.loadingSpinnerMarkup()
+            );
+        }
         target.insertAdjacentHTML('beforeend', markup.weatherMarkup());
 
         const digitTarget = document.querySelector('.temp-svg');
@@ -105,12 +104,11 @@ class WeatherView {
 
     async #renderWeatherUpdates(cleanWeatherData) {
         const weatherDescription = document.querySelector('.description');
-
-        const data = cleanWeatherData;
-
         const digitTarget = document.querySelector('.temp-svg');
         const locationTitle = document.querySelector('.location-title');
         const weatherIcon = document.querySelector('.icon i');
+
+        const data = cleanWeatherData;
 
         const { 0: digitOne, 1: digitTwo } = digitTarget.children;
 
@@ -118,8 +116,7 @@ class WeatherView {
         digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);
         weatherIcon.setAttribute(
             'class',
-            `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${
-                data.iconData.iconId
+            `wi wi-owm-${data.iconData.icon === 'n' ? 'night' : 'day'}-${data.iconData.iconId
             }`
         );
         weatherDescription.innerText = data.weatherData.description;
@@ -183,13 +180,12 @@ class WeatherView {
         const { status } = data.response;
         const { message } = data.response.data;
 
-        const errorElement = `<p class="error-msg ${
-            status === 401
+        const errorElement = `<p class="error-msg ${status === 401
                 ? 'apiKey'
                 : status === 404 || status === 400
-                ? 'zipcode'
-                : ''
-        }">${message}</p>`;
+                    ? 'zipcode'
+                    : ''
+            }">${message}</p>`;
 
         // in all instances of error, we want to stop our setInterval, so we call this here.
         this.#stopInterval();
@@ -222,14 +218,10 @@ class WeatherView {
         if (status !== 200) slideIn('.error-msg');
     }
 
-    async start(userOptions) {
+    start(userOptions) {
         this.updateOptions(userOptions);
-        try {
-            this.#initRender();
-            this.#startInterval(true);
-        } catch (err) {
-            console.log(err);
-        }
+        this.#initRender();
+        this.#startInterval(true);
     }
 }
 
