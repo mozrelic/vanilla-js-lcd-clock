@@ -9,11 +9,8 @@ import { modalHandler } from './src/js/helpers/modal';
 import { defaultState } from './src/js/settings';
 import { slideIn } from './src/js/helpers/slideIn';
 
-let settings;
-
-settings = {
+let settings = {
     ...defaultState,
-    ...settings,
     hour12: true,
     apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
     zipcode: '97756',
@@ -21,10 +18,10 @@ settings = {
 
 let localStorageSettings = {
     ...defaultState,
-    ...settings,
     ...store.get('settings'),
 };
 
+// send initial settings to clock and weather from locaStorage
 ClockView.start({
     ...localStorageSettings,
 });
@@ -32,14 +29,13 @@ ClockView.start({
 WeatherView.start({
     ...localStorageSettings,
 });
+
 modalHandler();
 
 const formTarget = document.querySelector('.settings');
 
-// store.clearAll();
-
+// load foarm fields with their respective data on startup
 FormHandler.init(localStorageSettings);
-ClockView.setOptions(localStorageSettings);
 
 formTarget.addEventListener('input', (e) => {
     const target = e.target.closest('.setting');

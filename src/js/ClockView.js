@@ -4,10 +4,10 @@
 //
 
 import { ClockClassTemplate } from './ClockClassTemplate';
-import markup from './markup';
-import time from './TimeObject';
 import { checkIfLoaded } from './helpers/checkIfLoaded';
 import { rgbToHsl } from './helpers/hexToHsl';
+import markup from './markup';
+import time from './TimeObject';
 
 class ClockView extends ClockClassTemplate {
     timeInterval;
