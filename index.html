@@ -6,26 +6,25 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LCD Clock and Weather Demo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap" rel="stylesheet" />
 </head>
 
 <body>
   <div class="modal-container hidden">
-
     <div class="settings">
       <div class="close-modal">
         <button type="button" class="close-button">X</button>
       </div>
-      <div class="weather-settings ">
+      <div class="weather-settings">
         <h2>API Settings</h2>
         <div class="columns">
           <div class="column">
             <div class="field-container api-key-container">
               <div class="inner-container">
-                <textarea data-type="apiKey" type="textarea" rows="3" name="set-api-key" class="set-api-key setting"
-                  autocomplete="off" /></textarea>
+                <textarea data-type="apiKey" rows="3" name="set-api-key" class="set-api-key setting"
+                  autocomplete="off"></textarea>
                 <label for="set-api-key">Set API Key</label>
               </div>
             </div>
@@ -40,7 +39,8 @@
             </div>
           </div>
         </div>
-      </div> <!-- end weather-settings -->
+      </div>
+      <!-- end weather-settings -->
       <div class="clock-settings">
         <h2>Clock Settings</h2>
         <div class="columns">
@@ -82,18 +82,18 @@
             </div>
           </div>
         </div>
-      </div><!-- end clock settings -->
-    </div><!-- end settings -->
-  </div><!--end modal-container-->
-  <div class="weather-container">
-
+      </div>
+      <!-- end clock settings -->
+    </div>
+    <!-- end settings -->
   </div>
+  <!--end modal-container-->
+  <div class="weather-container"></div>
 
   <div class="container">
-    <div class="clock-container">
-
-    </div>
-    <script type="module" src="/index.js"></script>
+    <div class="clock-container"></div>
+  </div>
+  <script type="module" src="/index.js"></script>
 </body>
 
 </html>
