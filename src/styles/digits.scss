@@ -9,10 +9,10 @@ svg {
     }
     &.num-1 {
         .arm {
-            &#arm2 {
+            &[data-arm-id='arm2'] {
                 fill: var(--active-color);
             }
-            &#arm3 {
+            &[data-arm-id='arm3'] {
                 fill: var(--active-color);
             }
         }
@@ -20,8 +20,8 @@ svg {
     &.num-2 {
         .arm {
             fill: var(--active-color);
-            &#arm3,
-            &#arm6 {
+            &[data-arm-id='arm3'],
+            &[data-arm-id='arm6'] {
                 fill: var(--inactive-color);
             }
         }
@@ -29,8 +29,8 @@ svg {
     &.num-3 {
         .arm {
             fill: var(--active-color);
-            &#arm6,
-            &#arm5 {
+            &[data-arm-id='arm6'],
+            &[data-arm-id='arm5'] {
                 fill: var(--inactive-color);
             }
         }
@@ -38,9 +38,9 @@ svg {
     &.num-4 {
         .arm {
             fill: var(--active-color);
-            &#arm1,
-            &#arm4,
-            &#arm5 {
+            &[data-arm-id='arm1'],
+            &[data-arm-id='arm4'],
+            &[data-arm-id='arm5'] {
                 fill: var(--inactive-color);
             }
         }
@@ -48,8 +48,8 @@ svg {
     &.num-5 {
         .arm {
             fill: var(--active-color);
-            &#arm2,
-            &#arm5 {
+            &[data-arm-id='arm2'],
+            &[data-arm-id='arm5'] {
                 fill: var(--inactive-color);
             }
         }
@@ -57,16 +57,16 @@ svg {
     &.num-6 {
         .arm {
             fill: var(--active-color);
-            &#arm2 {
+            &[data-arm-id='arm2'] {
                 fill: var(--inactive-color);
             }
         }
     }
     &.num-7 {
         .arm {
-            &#arm1,
-            &#arm2,
-            &#arm3 {
+            &[data-arm-id='arm1'],
+            &[data-arm-id='arm2'],
+            &[data-arm-id='arm3'] {
                 fill: var(--active-color);
             }
         }
@@ -82,7 +82,7 @@ svg {
         .arm {
             fill: var(--active-color);
 
-            &#arm5 {
+            &[data-arm-id='arm5'] {
                 fill: var(--inactive-color);
             }
         }
@@ -91,7 +91,7 @@ svg {
     &.num-0 {
         .arm {
             fill: var(--active-color);
-            &#arm7 {
+            &[data-arm-id='arm7'] {
                 fill: var(--inactive-color);
             }
         }

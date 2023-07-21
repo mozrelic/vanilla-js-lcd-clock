@@ -12,13 +12,13 @@
 </head>
 
 <body>
-  <div class="modal-container hidden">
+  <div class="modal-container" role="dialog" aria-label="Settings Menu" aria-modal="true" aria-hidden="true">
     <div class="settings">
       <div class="close-modal">
         <button type="button" class="close-button" aria-label="close">X</button>
       </div>
       <form>
-        <section class="weather-settings">
+        <section class="weather-settings" aria-label="Weather settings">
           <h2>API Settings</h2>
           <div class="columns">
             <div class="column">
@@ -42,7 +42,7 @@
           </div>
         </section>
         <!-- end weather-settings -->
-        <section class="clock-settings">
+        <section class="clock-settings" aria-label="Clock Settings">
           <h2>Clock Settings</h2>
           <div class="columns">
             <div class="column">
