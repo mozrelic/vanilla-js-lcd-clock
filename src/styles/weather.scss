@@ -69,8 +69,8 @@
     height: 64px;
     margin: 8px;
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border: 8px solid #fff;
-    border-color: #fff transparent transparent transparent;
+    border: 8px solid var(--active-color);
+    border-color: var(--active-color) transparent transparent transparent;
     border-radius: 50%;
     box-sizing: border-box;
 }

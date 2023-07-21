@@ -1,11 +1,13 @@
 /* @use 'custom-properties';*/
 
 body {
+    background: var(--bg-color);
+}
+main {
     display: flex;
     height: 100vh;
     margin: 0 5%;
     align-items: center;
-    background: var(--bg-color);
     flex-direction: column;
 }
 
