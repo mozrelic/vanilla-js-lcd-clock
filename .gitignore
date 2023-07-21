@@ -12,7 +12,7 @@
 # for production
 /build
 /dist
-/public
+#/public
 
 # misc
 .DS_Store
