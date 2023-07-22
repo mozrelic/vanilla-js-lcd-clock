@@ -19,4 +19,13 @@ Build:
 
 `npm run preview`
 
-Move dist/fonts folder into dist/assets folder.
+TODO:
+
+-   refactor modal to class, and rename module to modalHandler
+-   rename slideIn to animateIn
+-   create animateOut
+-   refactor animateIn and animateOut into a class with appropriate methods
+-   add the ability to save, replace and recall specific color settings
+-   add ability to show/hide weather in settings
+-   refactor index.js, the goal is to eventually be able to call one class method and pass in a settings object and everything will just work.
+-   add a link to OpenWeather in settings menu, style link appropriately

@@ -12,7 +12,7 @@ import { slideIn } from './src/js/helpers/slideIn';
 let settings = {
     ...defaultState,
     hour12: true,
-    apiKey: 'ef9f7861750cc66b5688bdfad901efd4',
+    apiKey: '',
     zipcode: '97756',
 };
 
