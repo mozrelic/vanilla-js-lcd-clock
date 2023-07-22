@@ -8,6 +8,6 @@ export function slideIn(target) {
         el.classList.add('slideIn');
         setTimeout(() => {
             el.classList.remove('slideIn');
-        }, 3200);
+        }, 700);
     });
 }

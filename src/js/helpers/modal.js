@@ -21,7 +21,8 @@ export function modalHandler() {
 
     modalTrigger.addEventListener('click', (e) => {
         if (!e.target) return;
-        setModalState(modalContainer, true, slideIn('.column'));
+        setModalState(modalContainer, true, slideIn('.column, .settings'));
+        // slideIn('.settings');
     });
 
     closeModal.addEventListener('click', (e) => {
