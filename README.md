@@ -29,3 +29,4 @@ TODO:
 -   add ability to show/hide weather in settings
 -   refactor index.js, the goal is to eventually be able to call one class method and pass in a settings object and everything will just work.
 -   add a link to OpenWeather in settings menu, style link appropriately
+-   write jsdocs for all the things

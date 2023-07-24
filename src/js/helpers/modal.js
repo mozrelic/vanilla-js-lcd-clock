@@ -2,7 +2,7 @@ import { slideIn } from './slideIn';
 export function modalHandler() {
     const modalContainer = document.querySelector('.modal-container');
     const modalTrigger = document.querySelector('.modal-trigger');
-    const closeModal = document.querySelector('.close-modal');
+    const closeModal = document.querySelector('.close-button');
 
     function setModalState(target, state, callback) {
         target.classList.toggle('active', state);
