@@ -2,6 +2,8 @@
 
 A simple lcd clock and weather app built in vanilla JS on top of Vite. [Demo available here](https://www.mattoz.com/lcd-clock/).
 
+!['Screenshot'](https://github.com/mozrelic/vanilla-js-lcd-clock/blob/main/Screenshot.png)
+
 Weather requires an [OpenWeather](https://openweathermap.org/) API key.
 User settings are saved in localStorage.
 
