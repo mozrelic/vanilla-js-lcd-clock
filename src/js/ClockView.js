@@ -7,7 +7,7 @@ import { ClockClassTemplate } from './ClockClassTemplate';
 import { checkIfLoaded } from './helpers/checkIfLoaded';
 import { rgbToHsl } from './helpers/hexToHsl';
 import markup from './markup';
-import time from './TimeObject';
+import Time from './TimeObject';
 
 class ClockView extends ClockClassTemplate {
     timeInterval;
@@ -100,7 +100,7 @@ class ClockView extends ClockClassTemplate {
     }
 
     #updateTime() {
-        const timeObj = time.getTime(this.options);
+        const timeObj = Time.getTime(this.options);
         this.#setAntePost(timeObj);
         this.#setTime(timeObj);
         this.#setMeta(timeObj);

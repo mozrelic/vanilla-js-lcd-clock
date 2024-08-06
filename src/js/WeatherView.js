@@ -181,10 +181,10 @@ class WeatherView {
         const { message } = data.response.data;
 
         const errorElement = `<p class="error-msg ${status === 401
-                ? 'apiKey'
-                : status === 404 || status === 400
-                    ? 'zipcode'
-                    : ''
+            ? 'apiKey'
+            : status === 404 || status === 400
+                ? 'zipcode'
+                : ''
             }">${message}</p>`;
 
         // in all instances of error, we want to stop our setInterval, so we call this here.

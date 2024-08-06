@@ -11,3 +11,7 @@ export function slideIn(target) {
         }, 700);
     });
 }
+
+// class Animate {
+//
+// }
