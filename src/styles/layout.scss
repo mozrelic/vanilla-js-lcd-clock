@@ -3,6 +3,7 @@
 body {
     background: var(--bg-color);
 }
+
 main {
     display: flex;
     height: 100vh;
@@ -35,9 +36,11 @@ main {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
     max-width: var(--clock-face-width);
+
     section {
         display: flex;
         position: relative;
+
         &:not(:last-of-type):after {
             content: '';
             position: absolute;
@@ -57,16 +60,19 @@ main {
     gap: var(--grid-gutter);
     grid-area: clock-meta;
     justify-content: space-between;
+
     section {
         display: grid;
         width: 15%;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
+
         /* max-width: 60px;*/
         svg {
             display: block;
             max-width: calc(var(--clock-face-width) / 15);
         }
+
         .meta-title {
             color: var(--active-color);
             font-size: clamp(1.2rem, 2.2vw, 3rem);
@@ -86,12 +92,14 @@ main {
     flex-direction: column;
     grid-area: antePost;
     max-width: 150px;
-    svg {
+
+    .svg svg {
         display: block;
         height: auto;
         fill: var(--inactive-color);
         margin-bottom: 1rem;
         max-width: var(--am-pm-letters-width);
+
         &.its-pm,
         &.its-am {
             fill: var(--active-color);

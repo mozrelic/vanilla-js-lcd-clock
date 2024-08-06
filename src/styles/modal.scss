@@ -11,15 +11,18 @@
     flex-direction: column;
     background-color: rgba(15, 25, 31, 0.5);
     backdrop-filter: blur(8px);
-    transition: 1.2s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+    transition: var(--animation-transition);
+
     display: none;
     opacity: 0;
     cursor: pointer;
     overflow-y: scroll;
+
     &.active {
         display: flex;
         opacity: 1;
     }
+
     button.close-button {
         background-color: transparent;
         font-size: 2rem;
@@ -28,21 +31,22 @@
         cursor: pointer;
     }
 }
+
 .modal-trigger {
-    /* overflow: hidden;*/
     position: relative;
-    svg {
-        /* width: 25px;*/
+
+    .settings-icon {
         position: absolute;
         z-index: 0;
         fill: var(--active-color) !important;
-        transform: translate(0px, -6px) scale(2);
         max-width: 35px;
-        transition: 1.2s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+        transition: var(--animation-transition);
         opacity: 1;
+        left: 0px;
+        top: 0px;
     }
+
     button {
-        /* transform: translate(-50px, 0px);*/
         width: 30px;
         height: 1.7rem;
         padding: 0 0.4rem;
@@ -58,13 +62,15 @@
         font-weight: var(--font-bold);
         cursor: pointer;
         font-size: clamp(0.8rem, 1vw, 1rem);
+
         svg {
             display: block;
         }
+
         .button-name {
             display: none;
             opacity: 0;
-            transition: 0.8s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+            transition: var(--animation-transition);
         }
 
         &:hover {
@@ -72,16 +78,19 @@
             color: var(--inactive-color);
             border-color: var(--active-color);
             background: var(--active-color);
+
             svg {
                 fill: var(--inactive-color) !important;
                 transition: 0.1s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
                 opacity: 0;
             }
+
             .button-name {
                 display: inline;
                 opacity: 1;
             }
         }
+
         &:before {
             display: block;
             content: '';
@@ -105,9 +114,11 @@
         }
     }
 }
+
 @media only screen and (max-width: 736px) {
     .modal-container {
         justify-content: flex-start;
+
         .settings {
             .columns {
                 gap: 2rem !important;

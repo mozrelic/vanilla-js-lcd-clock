@@ -26,6 +26,9 @@
     /* forms*/
     --border-radius: 0.4rem;
     --input-height: 3.1rem;
+
+    /* transition */
+    --animation-transition: 0.8s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
 }
 
 // @media (min-resolution: 120dpi) {

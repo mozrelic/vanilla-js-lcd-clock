@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400&display=swap" rel="stylesheet" />
+  <script type="module" defer src="/index.js"></script>
+
 </head>
 
 <body>
@@ -20,6 +22,7 @@
       <form>
         <section class="weather-settings" aria-label="Weather settings">
           <h2>API Settings</h2>
+          <p class="weather-api-info">Weather by <a href="https://openweathermap.org/api" target="_blank">OpenWeather</a></p>
           <div class="columns">
             <div class="column">
               <div class="field-container api-key-container">
@@ -97,7 +100,7 @@
       <div class="clock-container"></div>
     </div>
   </main>
-  <script type="module" src="/index.js"></script>
+  <!-- <script type="module" src="/index.js"></script> -->
 </body>
 
 </html>
