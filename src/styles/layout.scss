@@ -44,12 +44,17 @@ main {
         &:not(:last-of-type):after {
             content: '';
             position: absolute;
-            right: -1rem;
+            right: -2vw;
             bottom: 0;
-            width: 1vw;
-            height: 1vw;
+            width: clamp(0.5rem, 1vw, 1rem);
+            height: clamp(0.5rem, 1vw, 1rem);
             background: var(--active-color);
             border-radius: 0.2rem;
+            transform: skew(-0.12rad);
+
+            @media (max-width: 736px) {
+                right: -4vw;
+            }
         }
     }
 }
@@ -67,7 +72,6 @@ main {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
 
-        /* max-width: 60px;*/
         svg {
             display: block;
             max-width: calc(var(--clock-face-width) / 15);
