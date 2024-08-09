@@ -23,8 +23,12 @@ main {
         'antePost clock-face'
         'antePost clock-meta';
     grid-template-columns: 1fr 5fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: 1fr 1fr;
     justify-content: center;
+
+    @media (max-width: 736px) {
+        gap: 5% 0;
+    }
 }
 
 .clock-face {
@@ -68,13 +72,22 @@ main {
 
     section {
         display: grid;
-        width: 15%;
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
+        grid-template-areas: 'digit1 digit2' 'meta-title meta-title';
+        justify-items: center;
+        width: clamp(3rem, 7vw, 10rem);
 
         svg {
             display: block;
-            max-width: calc(var(--clock-face-width) / 15);
+
+            &:nth-of-type(1) {
+                grid-area: digit1;
+            }
+
+            &:nth-of-type(2) {
+                grid-area: digit2;
+            }
         }
 
         .meta-title {
@@ -83,9 +96,14 @@ main {
             font-weight: var(--font-bold);
             grid-column-end: 4;
             grid-column-start: 1;
-            margin-top: 35%;
+            margin-top: 2vw;
             text-align: center;
             text-transform: capitalize;
+            grid-area: meta-title;
+
+            @media (max-width: 736px) {
+                margin-top: 2rem;
+            }
         }
     }
 }
