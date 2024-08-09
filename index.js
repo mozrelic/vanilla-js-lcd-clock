@@ -7,27 +7,27 @@ import WeatherView from './src/js/WeatherView';
 import FormHandler from './src/js/FormHandler';
 import { modalHandler } from './src/js/helpers/modal';
 import { defaultState } from './src/js/settings';
-import { slideIn } from './src/js/helpers/slideIn';
+import AnimateTransition from './src/js/helpers/Animation';
 
 let settings = {
-    ...defaultState,
-    hour12: true,
-    apiKey: '',
-    zipcode: '97756',
+  ...defaultState,
+  hour12: true,
+  apiKey: '',
+  zipcode: '97756',
 };
 
 let localStorageSettings = {
-    ...defaultState,
-    ...store.get('settings'),
+  ...defaultState,
+  ...store.get('settings'),
 };
 
 // send initial settings to clock and weather from locaStorage
 ClockView.start({
-    ...localStorageSettings,
+  ...localStorageSettings,
 });
 
 WeatherView.start({
-    ...localStorageSettings,
+  ...localStorageSettings,
 });
 
 modalHandler();
@@ -38,20 +38,20 @@ const formTarget = document.querySelector('.settings');
 FormHandler.init(localStorageSettings);
 
 formTarget.addEventListener('input', (e) => {
-    const target = e.target.closest('.setting');
+  const target = e.target.closest('.setting');
 
-    FormHandler.handleChange(target);
-    settings = FormHandler.returnState();
-    store.set('settings', settings);
+  FormHandler.handleChange(target);
+  settings = FormHandler.returnState();
+  store.set('settings', settings);
 
-    ClockView.setOptions(settings);
-    ClockView.rerenderUpdatedOptions();
-    if (
-        target.classList.contains('set-api-key') ||
-        target.classList.contains('set-zipcode')
-    ) {
-        WeatherView.updateOptions(settings);
-    }
+  ClockView.setOptions(settings);
+  ClockView.rerenderUpdatedOptions();
+  if (
+    target.classList.contains('set-api-key') ||
+    target.classList.contains('set-zipcode')
+  ) {
+    WeatherView.updateOptions(settings);
+  }
 });
 
-slideIn('.svg');
+AnimateTransition.startAnimation('.svg, .modal-trigger');

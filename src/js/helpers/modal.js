@@ -1,41 +1,52 @@
-import { slideIn } from './slideIn';
+import AnimateTransition from './Animation';
+
 export function modalHandler() {
     const modalContainer = document.querySelector('.modal-container');
-    const modalTrigger = document.querySelector('.modal-trigger');
-    const closeModal = document.querySelector('.close-button');
 
-    function setModalState(target, state, callback) {
-        target.classList.toggle('active', state);
+    function setModalState(target, state, delayTime = 0) {
         if (typeof state !== 'undefined') {
-            state = !state;
-            target.setAttribute('aria-hidden', state);
-        }
-        callback;
-    }
-
-    function escClose(e) {
-        if (!e.keyCode || e.keyCode === 27) {
-            setModalState(modalContainer, false);
+            setTimeout(() => {
+                target.classList.toggle('active', state);
+                target.setAttribute('aria-hidden', !state);
+            }, delayTime);
         }
     }
+    function openModal(e) {
+        if (!e) return;
 
-    modalTrigger.addEventListener('click', (e) => {
-        if (!e.target) return;
-        setModalState(modalContainer, true, slideIn('.column, .settings'));
-        // slideIn('.settings');
-    });
+        AnimateTransition.startAnimation('.column, .settings');
+        setModalState(modalContainer, true);
+    }
 
-    closeModal.addEventListener('click', (e) => {
-        if (!e.target) return;
-        setModalState(modalContainer, false);
-    });
+    function closeModal(e) {
+        if (!e) return;
 
-    modalContainer.addEventListener('click', (e) => {
-        if (!e.target) return;
-        if (e.target.classList.contains('modal-container')) {
-            setModalState(modalContainer, false);
+        const delayTime = AnimateTransition.startAnimation(
+            '.settings, .modal-container',
+            'slideOut'
+        );
+
+        setModalState(modalContainer, false, delayTime);
+    }
+
+    document.addEventListener('click', (e) => {
+        const target = e.target;
+
+        if (target.closest('.modal-button')) {
+            openModal(target);
+        }
+
+        if (
+            target.classList.contains('close-button') ||
+            target.classList.contains('modal-container')
+        ) {
+            closeModal(target);
         }
     });
 
-    document.addEventListener('keydown', escClose);
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalContainer.classList.contains('active')) {
+            closeModal(e);
+        }
+    });
 }
