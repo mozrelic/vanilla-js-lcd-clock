@@ -103,14 +103,12 @@ class WeatherView {
   }
 
   async #renderWeatherUpdates(cleanWeatherData) {
-    const weatherDescription = document.querySelector('.description');
-    const digitTarget = document.querySelector('.temp-svg');
-    const locationTitle = document.querySelector('.location-title');
-    const weatherIcon = document.querySelector('.icon i');
-
-    const data = cleanWeatherData;
-
-    const { 0: digitOne, 1: digitTwo } = digitTarget.children;
+    const weatherDescription = document.querySelector('.description'),
+      digitTarget = document.querySelector('.temp-svg'),
+      locationTitle = document.querySelector('.location-title'),
+      weatherIcon = document.querySelector('.icon i'),
+      data = cleanWeatherData,
+      { 0: digitOne, 1: digitTwo } = digitTarget.children;
 
     digitOne.setAttribute('class', `num-${data.weatherData.temp.val1}`);
     digitTwo.setAttribute('class', `num-${data.weatherData.temp.val2}`);

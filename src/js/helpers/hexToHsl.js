@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @function rgbToHsl - converts a hex color value to HSL
  * @param {string} color - expects a hex value

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  *
  * @param {Function} observerCallback - callback to pass to the MutationObserver
