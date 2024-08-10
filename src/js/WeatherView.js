@@ -147,7 +147,7 @@ class WeatherView {
   async #weather() {
     try {
       const geoData = await this.#getGeo();
-      this.#apiErrorHandler(geoData);
+      this.#apiErrorMessageHandler(geoData);
 
       const weatherData = await this.#getWeather(geoData);
       const cleanWeatherData = await this.#updateWeather(weatherData);
@@ -158,7 +158,7 @@ class WeatherView {
     }
   }
 
-  #apiErrorHandler(data) {
+  #apiErrorMessageHandler(data) {
     // console.log(data);
     const apiKeyContainer = document.querySelector('.api-key-container'),
       zipcodeContainer = document.querySelector('.zipcode-container'),
