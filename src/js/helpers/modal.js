@@ -1,32 +1,33 @@
-import AnimateTransition from './Animation';
+import { AnimateTransition } from './Animation';
 
 export function modalHandler() {
     const modalContainer = document.querySelector('.modal-container');
 
-    function setModalState(target, state, delayTime = 0) {
+    function setModalState(target, state, delayLength = 0) {
         if (typeof state !== 'undefined') {
             setTimeout(() => {
                 target.classList.toggle('active', state);
                 target.setAttribute('aria-hidden', !state);
-            }, delayTime);
+            }, delayLength);
         }
     }
     function openModal(e) {
         if (!e) return;
 
-        AnimateTransition.startAnimation('.column, .settings');
+        const animate = new AnimateTransition('.column, .settings');
+        animate.startAnimation();
         setModalState(modalContainer, true);
     }
 
     function closeModal(e) {
         if (!e) return;
 
-        const delayTime = AnimateTransition.startAnimation(
+        const animate = new AnimateTransition(
             '.settings, .modal-container',
             'slideOut'
         );
-
-        setModalState(modalContainer, false, delayTime);
+        const delayLength = animate.startAnimation();
+        setModalState(modalContainer, false, delayLength);
     }
 
     document.addEventListener('click', (e) => {

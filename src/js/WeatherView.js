@@ -1,6 +1,6 @@
 import axios from 'axios';
 import markup from './markup';
-import AnimateTransition from './helpers/Animation';
+import { AnimateTransition } from './helpers/Animation';
 
 // TODO:
 //
@@ -32,7 +32,6 @@ class WeatherView {
     const spinner = document.querySelector('.lds-ring');
 
     const baseURL = this.#BASE_URL_WEATHER;
-    // console.log('from getWeatherFromApi', geoData);
 
     try {
       const locationData = geoData.data;
@@ -151,7 +150,6 @@ class WeatherView {
   }
 
   #apiErrorMessageHandler(data) {
-    // console.log('from apiErrorMessageHandler', data);
     const status = data?.response?.status;
     const message = data?.response?.data?.message;
     const apiKeyContainer = document.querySelector('.api-key-container'),
@@ -186,20 +184,21 @@ class WeatherView {
         `API Key probably is wrong or api is down : `,
         data?.response.statusText
       );
-      AnimateTransition.startAnimation('.error-msg.apiKey');
+      const animateIn = new AnimateTransition('.error-msg.apiKey');
+      animateIn.startAnimation();
     } else {
-      const endTime = AnimateTransition.startAnimation(
+      const animateOut = new AnimateTransition(
         '.error-msg.apiKey',
         'slideOut'
       );
-      // console.log('end time for apiKey', endTime);
+      const delayLength = animateOut.startAnimation();
 
       setTimeout(() => {
         apiKeyContainer
           ? apiKeyContainer.classList.remove('error')
           : '';
         apiKeyErrorMsg ? apiKeyErrorMsg.remove() : '';
-      }, endTime);
+      }, delayLength);
     }
 
     if (status === 404 || status === 400) {
@@ -208,19 +207,20 @@ class WeatherView {
         `Zipcode is probably wrong : `,
         data?.response.statusText
       );
-      AnimateTransition.startAnimation('.error-msg.zipcode');
+      const animateIn = new AnimateTransition('.error-msg.zipcode');
+      animateIn.startAnimation();
     } else {
-      const endTime = AnimateTransition.startAnimation(
+      const animateOut = new AnimateTransition(
         '.error-msg.zipcode',
         'slideOut'
       );
-      // console.log('end time for zipcode', endTime);
+      const delayLength = animateOut.startAnimation();
       setTimeout(() => {
         zipcodeContainer
           ? zipcodeContainer.classList.remove('error')
           : '';
         zipcodeErrorMsg ? zipcodeErrorMsg.remove() : '';
-      }, endTime);
+      }, delayLength);
     }
   }
 

@@ -1,19 +1,16 @@
-class AnimateTransition {
+export class AnimateTransition {
   target;
   animationType;
-  time = 50;
+  time = 200;
   delay = 50;
 
-  // constructor(target, animationType = 'slideIn'){
-  //     this.target = document.querySelectorAll(target);
-  //     this.animationType = animationType;
-  // }
-
-  startAnimation(target, animationType = 'slideIn') {
-    if (!target) return;
-
-    this.target = document.querySelectorAll(target);
+  constructor(target, animationType = 'slideIn') {
+    this.target = document.querySelectorAll(`${target}`);
     this.animationType = animationType;
+  }
+
+  startAnimation() {
+    if (!this.target) return;
 
     if (this.animationType === 'slideIn') {
       this.#slideIn();
@@ -35,20 +32,17 @@ class AnimateTransition {
       }, totalTime);
 
       // removes the classes required for the animation. This is probably unnecessary but I don't like the extra classes on the elements
+      // IMPORTANT NOTE about totalTime for this setTimeout: when there is only 1 element in the target, the classes are removed
+      // at the exact same time they are applied in the previous setTimout, this make the transition animation happen so fast it
+      // becomes inpercievable, so I have to add 100ms to totalTime to ensure
+      // that the animation can actually be seen.
       if (totalInd === ind) {
-        // console.log('totalInd', totalInd, 'ind', ind);
-        console.log(this.target);
         setTimeout(() => {
           this.target.forEach((element) => {
-            // console.log('from Animate', element);
-            console.log('TRUE', element);
-
             element.classList.remove('hide', 'slideIn');
-            // element.classList.remove('slideIn');
           });
-        }, totalTime);
+        }, totalTime + 100);
       }
-      console.log(totalTime);
     });
   }
 
@@ -61,10 +55,10 @@ class AnimateTransition {
       let totalTime = this.time + delay;
 
       el.classList.add('slideOut');
+      el.classList.add('hide');
 
       // removes the classes required for the animation. This is probably unnecessary but I don't like the extra classes on the elements
       if (totalInd === ind) {
-        // console.log('TRUE');
         endTime = totalTime;
         setTimeout(() => {
           this.target.forEach((element) => {
@@ -76,6 +70,3 @@ class AnimateTransition {
     return endTime;
   }
 }
-
-export default new AnimateTransition();
-// export default AnimateTransition();
