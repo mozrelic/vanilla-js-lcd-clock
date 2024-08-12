@@ -11,7 +11,7 @@ class WeatherView {
   #timeInterval;
   #intervalRunning = false;
 
-  async #getGeo() {
+  async #getGeoFromApi() {
     const baseURL = this.#BASE_URL_WEATHER;
     const { zipcode, apiKey } = this.#options;
     try {
@@ -21,23 +21,21 @@ class WeatherView {
         timeout: 2000,
       };
       const response = await axios(options);
-      const data = response.data;
-
-      return data;
+      return response;
     } catch (err) {
-      // console.log(err);
       return err;
     }
   }
 
-  async #getWeather(geoData) {
+  async #getWeatherFromApi(geoData) {
     const target = document.querySelector('.weather-container');
     const spinner = document.querySelector('.lds-ring');
 
     const baseURL = this.#BASE_URL_WEATHER;
+    // console.log('from getWeatherFromApi', geoData);
 
     try {
-      const locationData = geoData;
+      const locationData = geoData.data;
       const { lat, lon } = locationData;
 
       const options = {
@@ -49,22 +47,20 @@ class WeatherView {
 
       const response = await axios(options);
 
-      const { data } = response;
-
       spinner.classList.add('hidden');
       target.classList.add('show');
 
-      return data;
+      // return data;
+      return response;
     } catch (err) {
-      console.log(err);
-
       spinner.classList.add('hidden');
       target.classList.add('show');
       return err;
     }
   }
 
-  #initRender() {
+  #renderWeatherMarkup() {
+    if (this.#options.hideWeather) return;
     const target = document.querySelector('.weather-container');
     const spinner = document.querySelector('.lds-ring');
 
@@ -82,9 +78,10 @@ class WeatherView {
   }
 
   async #updateWeather(weatherData) {
-    const data = weatherData;
+    if (!weatherData.data) return;
+    const { data } = weatherData;
 
-    const cleanData = {
+    return {
       weatherData: {
         name: data.name,
         description: data.weather[0].description,
@@ -98,11 +95,10 @@ class WeatherView {
         iconId: data.weather[0].id,
       },
     };
-
-    return cleanData;
   }
 
   async #renderWeatherUpdates(cleanWeatherData) {
+    if (!cleanWeatherData) return;
     const weatherDescription = document.querySelector('.description'),
       digitTarget = document.querySelector('.temp-svg'),
       locationTitle = document.querySelector('.location-title'),
@@ -122,10 +118,10 @@ class WeatherView {
   }
 
   #startInterval(bool) {
-    this.#weather();
+    this.#getWeather();
     if (this.#intervalRunning === false) {
       this.#timeInterval = setInterval(
-        async () => await this.#weather(),
+        async () => await this.#getWeather(),
         1000 * 9
       );
       this.#intervalRunning = bool;
@@ -142,47 +138,33 @@ class WeatherView {
     this.#startInterval(true);
   }
 
-  async #weather() {
+  async #getWeather() {
     try {
-      const geoData = await this.#getGeo();
+      const geoData = await this.#getGeoFromApi();
       this.#apiErrorMessageHandler(geoData);
-
-      const weatherData = await this.#getWeather(geoData);
+      const weatherData = await this.#getWeatherFromApi(geoData);
       const cleanWeatherData = await this.#updateWeather(weatherData);
       await this.#renderWeatherUpdates(cleanWeatherData);
     } catch (err) {
-      // console.log(err);
       return err;
     }
   }
 
   #apiErrorMessageHandler(data) {
-    // console.log(data);
+    // console.log('from apiErrorMessageHandler', data);
+    const status = data?.response?.status;
+    const message = data?.response?.data?.message;
     const apiKeyContainer = document.querySelector('.api-key-container'),
       zipcodeContainer = document.querySelector('.zipcode-container'),
-      errEl1 = apiKeyContainer.querySelector('.error-msg.apiKey'),
-      errEl2 = zipcodeContainer.querySelector('.error-msg.zipcode'),
-      weatherContainer = document.querySelector('.weather');
-
-    if (apiKeyContainer.children.length > 1) {
-      apiKeyContainer.classList.remove('error');
-      errEl1.remove();
-    }
-
-    if (zipcodeContainer.children.length > 1) {
-      zipcodeContainer.classList.remove('error');
-      errEl2.remove();
-    }
-
-    if (!data.response) return;
-    const { status } = data.response;
-    const { message } = data.response.data;
+      weatherContainer = document.querySelector('.weather'),
+      apiKeyErrorMsg = document.querySelector('.error-msg.apiKey'),
+      zipcodeErrorMsg = document.querySelector('.error-msg.zipcode');
 
     const errorElement = `<p class="error-msg ${status === 401
-      ? 'apiKey'
-      : status === 404 || status === 400
-        ? 'zipcode'
-        : ''
+        ? 'apiKey'
+        : status === 404 || status === 400
+          ? 'zipcode'
+          : ''
       }">${message}</p>`;
 
     // in all instances of error, we want to stop our setInterval, so we call this here.
@@ -195,7 +177,7 @@ class WeatherView {
         parentContainer.insertAdjacentHTML('beforeend', errorElement);
       parentContainer.classList.add('error');
       weatherContainer.remove();
-      this.#initRender();
+      this.#renderWeatherMarkup();
     };
 
     if (status === 401) {
@@ -204,6 +186,20 @@ class WeatherView {
         `API Key probably is wrong or api is down : `,
         data?.response.statusText
       );
+      AnimateTransition.startAnimation('.error-msg.apiKey');
+    } else {
+      const endTime = AnimateTransition.startAnimation(
+        '.error-msg.apiKey',
+        'slideOut'
+      );
+      // console.log('end time for apiKey', endTime);
+
+      setTimeout(() => {
+        apiKeyContainer
+          ? apiKeyContainer.classList.remove('error')
+          : '';
+        apiKeyErrorMsg ? apiKeyErrorMsg.remove() : '';
+      }, endTime);
     }
 
     if (status === 404 || status === 400) {
@@ -212,16 +208,25 @@ class WeatherView {
         `Zipcode is probably wrong : `,
         data?.response.statusText
       );
+      AnimateTransition.startAnimation('.error-msg.zipcode');
+    } else {
+      const endTime = AnimateTransition.startAnimation(
+        '.error-msg.zipcode',
+        'slideOut'
+      );
+      // console.log('end time for zipcode', endTime);
+      setTimeout(() => {
+        zipcodeContainer
+          ? zipcodeContainer.classList.remove('error')
+          : '';
+        zipcodeErrorMsg ? zipcodeErrorMsg.remove() : '';
+      }, endTime);
     }
-    if (status !== 200) {
-      AnimateTransition.startAnimation('.error-msg');
-    }
-    console.log(status);
   }
 
   start(userOptions) {
     this.updateOptions(userOptions);
-    this.#initRender();
+    this.#renderWeatherMarkup();
     this.#startInterval(true);
   }
 }
