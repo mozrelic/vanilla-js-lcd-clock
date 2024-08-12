@@ -98,6 +98,7 @@ textarea {
                 height: 0.3rem;
                 border-radius: 5px;
                 background-color: var(--error-color-green);
+                transition: background-color 0.2s ease-in-out;
             }
         }
 
@@ -118,6 +119,7 @@ textarea {
                 height: 0.3rem;
                 border-radius: 5px;
                 background-color: var(--error-color-green);
+                transition: background-color 0.2s ease-in-out;
             }
         }
 

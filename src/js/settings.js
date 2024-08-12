@@ -6,6 +6,7 @@ export const defaultState = {
     inactiveColor: '#231519',
     clockMeta: true,
     hour12: false,
+    hideWeather: false,
     zipcode: '97756',
     apiKey: '',
 };
