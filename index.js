@@ -11,7 +11,7 @@ import { AnimateTransition } from './src/js/helpers/Animation';
 
 let settings = {
     ...defaultState,
-    hour12: true,
+    showHour12: true,
     apiKey: '',
     zipcode: '97756',
 };
@@ -48,9 +48,12 @@ formTarget.addEventListener('input', (e) => {
     ClockView.rerenderUpdatedOptions();
     if (
         target.classList.contains('set-api-key') ||
-        target.classList.contains('set-zipcode')
+        target.classList.contains('set-zipcode') ||
+        target.classList.contains('show-weather')
     ) {
         WeatherView.updateOptions(settings);
+        WeatherView.rerenderUpdatedOptions();
+        // WeatherView.renderWeatherMarkup();
     }
 });
 

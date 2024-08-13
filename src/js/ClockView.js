@@ -56,7 +56,8 @@ class ClockView extends ClockClassTemplate {
 
     #setMeta(timeObj) {
         // console.log(this.options);
-        if (this.options.clockMeta === false || !this.options.clockMeta) return;
+        if (this.options.showClockMeta === false || !this.options.showClockMeta)
+            return;
         const target = this.target.querySelector('.clock-meta-container');
         // this is a different way of spreading the target children into a new variable
         // const metaTargetArr = Object.values(target.children);
@@ -119,7 +120,8 @@ class ClockView extends ClockClassTemplate {
     }
 
     #setAntePost(timeObj) {
-        if (this.options.hour12 === false || !this.options.hour12) return;
+        if (this.options.showHour12 === false || !this.options.showHour12)
+            return;
         const antePostEl = this.target.querySelector('.ante-post-svgs');
         if (!antePostEl) return;
         // get children elements of am-pm parent container
@@ -196,7 +198,8 @@ class ClockView extends ClockClassTemplate {
     }
 
     #renderAntePost() {
-        if (!this.options.hour12 || this.options.hour12 === false) return;
+        if (!this.options.showHour12 || this.options.showHour12 === false)
+            return;
 
         const target = this.target.querySelector('.am-pm');
         const guard = this.target.querySelector('.ante-post-svgs');
@@ -213,7 +216,8 @@ class ClockView extends ClockClassTemplate {
     }
 
     #renderClockMeta() {
-        if (!this.options.clockMeta || this.options.clockMeta === false) return;
+        if (!this.options.showClockMeta || this.options.showClockMeta === false)
+            return;
 
         const metaTypes = ['day', 'month', 'year'];
         const metaTarget = this.target.querySelector('.clock-meta-container');

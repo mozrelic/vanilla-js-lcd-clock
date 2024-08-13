@@ -4,9 +4,9 @@ export const defaultState = {
     activeColor: '#c00033',
     // inactiveColor: '#262626',
     inactiveColor: '#231519',
-    clockMeta: true,
-    hour12: false,
-    hideWeather: false,
+    showClockMeta: true,
+    showHour12: false,
+    showWeather: false,
     zipcode: '97756',
     apiKey: '',
 };

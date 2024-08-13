@@ -6,10 +6,10 @@ class Time extends ClockClassTemplate {
 
     // NOTE: this.defaultOptions is not accessible AT THE MOMENT so
     // TODO: create a new class template that contains all the default options for the clock
-    const hour12 =
-      options.hour12 === true
-        ? options.hour12
-        : this.defaultOptions.hour12;
+    const showHour12 =
+      options.showHour12 === true
+        ? options.showHour12
+        : this.defaultOptions.showHour12;
 
     const formatter = new Intl.DateTimeFormat('en-us', {
       year: 'numeric',
@@ -18,7 +18,7 @@ class Time extends ClockClassTemplate {
       hour: 'numeric',
       minute: 'numeric',
       second: 'numeric',
-      hour12: hour12,
+      showHour12: showHour12,
     });
 
     const filteredTime = formatter
@@ -29,7 +29,7 @@ class Time extends ClockClassTemplate {
     // object with a specific key name. I have done it this way so I can use the final key value as a template literal to render
     // the correct css class
     const tempTimeObj = {};
-    filteredTime.forEach(function(item) {
+    filteredTime.forEach(function (item) {
       let tempTimeValue = item['value']
         .padStart(2, '0')
         .split('')

@@ -21,9 +21,9 @@ class FormHandler {
                 field.value = this.settings[attribute];
 
             if (
-                field.getAttribute('data-type') === 'clockMeta' ||
-                field.getAttribute('data-type') === 'hour12' ||
-                field.getAttribute('data-type') === ''
+                field.getAttribute('data-type') === 'showClockMeta' ||
+                field.getAttribute('data-type') === 'showHour12' ||
+                field.getAttribute('data-type') === 'showWeather'
             ) {
                 field.checked = Boolean(this.settings[attribute]);
             }

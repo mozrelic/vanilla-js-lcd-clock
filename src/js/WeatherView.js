@@ -8,7 +8,7 @@ import { AnimateTransition } from './helpers/Animation';
 class WeatherView {
   #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
   #options;
-  #timeInterval;
+  #intervalId;
   #intervalRunning = false;
 
   async #getGeoFromApi() {
@@ -49,7 +49,6 @@ class WeatherView {
       spinner.classList.add('hidden');
       target.classList.add('show');
 
-      // return data;
       return response;
     } catch (err) {
       spinner.classList.add('hidden');
@@ -59,7 +58,9 @@ class WeatherView {
   }
 
   #renderWeatherMarkup() {
-    if (this.#options.hideWeather) return;
+    if (!this.#options.showWeather) {
+      return;
+    }
     const target = document.querySelector('.weather-container');
     const spinner = document.querySelector('.lds-ring');
 
@@ -93,6 +94,7 @@ class WeatherView {
         icon: data.weather[0].icon.at(-1),
         iconId: data.weather[0].id,
       },
+      status: weatherData.status,
     };
   }
 
@@ -116,28 +118,11 @@ class WeatherView {
     locationTitle.innerText = data.weatherData.name;
   }
 
-  #startInterval(bool) {
-    this.#getWeather();
-    if (this.#intervalRunning === false) {
-      this.#timeInterval = setInterval(
-        async () => await this.#getWeather(),
-        1000 * 9
-      );
-      this.#intervalRunning = bool;
-    }
-  }
-
-  #stopInterval() {
-    clearInterval(this.#timeInterval);
-    this.#intervalRunning = false;
-  }
-
-  updateOptions(userOptions) {
-    this.#options = { ...userOptions };
-    this.#startInterval(true);
-  }
-
   async #getWeather() {
+    if (!this.#options.showWeather) {
+      this.#stopInterval();
+      return;
+    }
     try {
       const geoData = await this.#getGeoFromApi();
       this.#apiErrorMessageHandler(geoData);
@@ -166,7 +151,15 @@ class WeatherView {
       }">${message}</p>`;
 
     // in all instances of error, we want to stop our setInterval, so we call this here.
-    this.#stopInterval();
+    // this.#stopInterval();
+
+    // console.log(data.status);
+    // console.log('statuscode', status);
+    if (!data.status) {
+      this.#stopInterval();
+    }
+    console.log('intervalId', this.#intervalId);
+    console.log('intervalRunning', this.#intervalRunning);
 
     // chose an arrow function here because needed access to the outer this for this.#initRender()
     const handleError = (targetClass, parentContainer) => {
@@ -224,10 +217,48 @@ class WeatherView {
     }
   }
 
+  rerenderUpdatedOptions() {
+    this.#destroyElement('.weather-container');
+    this.#renderWeatherMarkup();
+  }
+
+  updateOptions(userOptions) {
+    this.#options = { ...userOptions };
+    if (!userOptions.showWeather || this.#intervalRunning) return;
+    this.#startInterval();
+  }
+
+  #destroyElement(targetEl) {
+    const target = document.querySelector(`${targetEl}`);
+    if (!target) return;
+    const elementGuard = [...target.children];
+    if (elementGuard.length >= 0) {
+      elementGuard.forEach((element) => {
+        element.remove();
+      });
+    }
+  }
+
+  #startInterval() {
+    if (this.#intervalRunning) return;
+    this.#getWeather();
+    this.#intervalRunning = true;
+    this.#intervalId = setInterval(
+      async () => await this.#getWeather(),
+      1000 * 2
+    );
+  }
+
+  #stopInterval() {
+    if (!this.#intervalRunning) return;
+    clearInterval(this.#intervalId);
+    this.#intervalId = null;
+    this.#intervalRunning = false;
+  }
+
   start(userOptions) {
     this.updateOptions(userOptions);
     this.#renderWeatherMarkup();
-    this.#startInterval(true);
   }
 }
 
