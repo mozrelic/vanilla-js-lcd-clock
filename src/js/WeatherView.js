@@ -1,61 +1,14 @@
-import axios from 'axios';
 import markup from './markup';
+import WeatherService from './helpers/WeatherService';
 import { AnimateTransition } from './helpers/Animation';
 
 // TODO:
 //
 
 class WeatherView {
-  #BASE_URL_WEATHER = `https://api.openweathermap.org/`;
   #options;
   #intervalId;
   #intervalRunning = false;
-
-  async #getGeoFromApi() {
-    const baseURL = this.#BASE_URL_WEATHER;
-    const { zipcode, apiKey } = this.#options;
-    try {
-      const options = {
-        baseURL,
-        url: `geo/1.0/zip?zip=${zipcode}&appid=${apiKey}`,
-        timeout: 2000,
-      };
-      const response = await axios(options);
-      return response;
-    } catch (err) {
-      return err;
-    }
-  }
-
-  async #getWeatherFromApi(geoData) {
-    const target = document.querySelector('.weather-container');
-    const spinner = document.querySelector('.lds-ring');
-
-    const baseURL = this.#BASE_URL_WEATHER;
-
-    try {
-      const locationData = geoData.data;
-      const { lat, lon } = locationData;
-
-      const options = {
-        baseURL,
-        url: `data/2.5/weather?lat=${lat}&lon=${lon}&exclude=hourly,daily&units=imperial&appid=${this.#options.apiKey
-          }`,
-        timeout: 2000,
-      };
-
-      const response = await axios(options);
-
-      spinner.classList.add('hidden');
-      target.classList.add('show');
-
-      return response;
-    } catch (err) {
-      spinner.classList.add('hidden');
-      target.classList.add('show');
-      return err;
-    }
-  }
 
   #renderWeatherMarkup() {
     if (!this.#options.showWeather) {
@@ -98,7 +51,7 @@ class WeatherView {
     };
   }
 
-  async #renderWeatherUpdates(cleanWeatherData) {
+  #renderWeatherUpdates(cleanWeatherData) {
     if (!cleanWeatherData) return;
     const weatherDescription = document.querySelector('.description'),
       digitTarget = document.querySelector('.temp-svg'),
@@ -124,11 +77,11 @@ class WeatherView {
       return;
     }
     try {
-      const geoData = await this.#getGeoFromApi();
+      const geoData = await WeatherService.getGeoFromApi();
       this.#apiErrorMessageHandler(geoData);
-      const weatherData = await this.#getWeatherFromApi(geoData);
+      const weatherData = await WeatherService.getWeatherFromApi(geoData);
       const cleanWeatherData = await this.#updateWeather(weatherData);
-      await this.#renderWeatherUpdates(cleanWeatherData);
+      this.#renderWeatherUpdates(cleanWeatherData);
     } catch (err) {
       return err;
     }
@@ -224,6 +177,7 @@ class WeatherView {
 
   updateOptions(userOptions) {
     this.#options = { ...userOptions };
+    WeatherService.setOptions(userOptions);
     if (!userOptions.showWeather || this.#intervalRunning) return;
     this.#startInterval();
   }
