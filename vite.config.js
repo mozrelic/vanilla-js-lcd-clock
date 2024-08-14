@@ -8,6 +8,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ['store'],
   },
+  build: {
+    sourcemap: true,
+  },
   base: './',
   // publicDir: '/assets/',
 });

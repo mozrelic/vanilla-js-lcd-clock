@@ -26,7 +26,8 @@ TODO:
 -   [ ] refactor modal to class, and rename module to modalHandler
 -   [x] refactor transition animations into a class with appropriate methods
 -   [ ] add the ability to save, replace and recall specific color settings
--   [ ] add ability to show/hide weather in settings
+-   [x] add ability to show/hide weather in settings
 -   [ ] refactor index.js, the goal is to eventually be able to call one class method and pass in a settings object and everything will just work.
 -   [x] add a link to OpenWeather in settings menu, style link appropriately
 -   [ ] write jsdocs for all the things
+-   [ ] At the moment, weather temperature can only be 2 digits, meaning it cannot display anything over 99 degrees or negative temperatures, need to fix
