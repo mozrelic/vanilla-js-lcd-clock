@@ -1,7 +1,7 @@
-//
-// NOTES:
-//
-
+/**
+ * A class to handle the clock view and related functionality.
+ * @extends ClockClassTemplate
+ */
 import { ClockClassTemplate } from './ClockClassTemplate';
 import { checkIfLoaded } from './helpers/checkIfLoaded';
 import { rgbToHsl } from './helpers/hexToHsl';
@@ -9,25 +9,29 @@ import markup from './markup';
 import Time from './TimeObject';
 
 class ClockView extends ClockClassTemplate {
-    timeInterval;
-    target;
-    options;
+    #timeInterval;
+    #target;
+    #options;
 
+    /**
+     * Sets the options for the clock view.
+     * @param {Object} options - The options to be set for the clock view.
+     */
     setOptions(options) {
-        this.options = { ...options };
+        this.#options = { ...options };
     }
 
     #setTarget() {
         const target =
-            this.options.target === true
-                ? this.options.target
+            this.#options.target === true
+                ? this.#options.target
                 : this.defaultOptions.target;
 
-        this.target = document.querySelector(`${target}`);
+        this.#target = document.querySelector(`${target}`);
     }
 
     #setClockColors() {
-        const { activeColor, inactiveColor } = this.options;
+        const { activeColor, inactiveColor } = this.#options;
 
         if (inactiveColor) {
             document.documentElement.style.setProperty(
@@ -56,9 +60,12 @@ class ClockView extends ClockClassTemplate {
 
     #setMeta(timeObj) {
         // console.log(this.options);
-        if (this.options.showClockMeta === false || !this.options.showClockMeta)
+        if (
+            this.#options.showClockMeta === false ||
+            !this.#options.showClockMeta
+        )
             return;
-        const target = this.target.querySelector('.clock-meta-container');
+        const target = this.#target.querySelector('.clock-meta-container');
         // this is a different way of spreading the target children into a new variable
         // const metaTargetArr = Object.values(target.children);
         if (!target) return;
@@ -100,7 +107,7 @@ class ClockView extends ClockClassTemplate {
     }
 
     #updateTime() {
-        const timeObj = Time.getTime(this.options);
+        const timeObj = Time.getTime(this.#options);
         this.#setAntePost(timeObj);
         this.#setTime(timeObj);
         this.#setMeta(timeObj);
@@ -120,9 +127,9 @@ class ClockView extends ClockClassTemplate {
     }
 
     #setAntePost(timeObj) {
-        if (this.options.showHour12 === false || !this.options.showHour12)
+        if (this.#options.showHour12 === false || !this.#options.showHour12)
             return;
-        const antePostEl = this.target.querySelector('.ante-post-svgs');
+        const antePostEl = this.#target.querySelector('.ante-post-svgs');
         if (!antePostEl) return;
         // get children elements of am-pm parent container
         const { 0: amEl, 1: pmEl } = antePostEl.children;
@@ -150,9 +157,9 @@ class ClockView extends ClockClassTemplate {
     }
 
     #setTime(timeObj) {
-        const target = this.target.querySelector('.hour');
+        const target = this.#target.querySelector('.hour');
         const clockFace = [
-            ...this.target.querySelector('.clock-face').children,
+            ...this.#target.querySelector('.clock-face').children,
         ];
         const [hourEl, minutesEl, secondsEl] = clockFace;
         let segmentGuard = hourEl.firstElementChild;
@@ -198,11 +205,11 @@ class ClockView extends ClockClassTemplate {
     }
 
     #renderAntePost() {
-        if (!this.options.showHour12 || this.options.showHour12 === false)
+        if (!this.#options.showHour12 || this.#options.showHour12 === false)
             return;
 
-        const target = this.target.querySelector('.am-pm');
-        const guard = this.target.querySelector('.ante-post-svgs');
+        const target = this.#target.querySelector('.am-pm');
+        const guard = this.#target.querySelector('.ante-post-svgs');
         const antePostMarkup = markup.antePostMarkup();
 
         // had to add this guard because when we destroyElement in the rerenderUpdatedOptions method, we were getting an
@@ -216,11 +223,14 @@ class ClockView extends ClockClassTemplate {
     }
 
     #renderClockMeta() {
-        if (!this.options.showClockMeta || this.options.showClockMeta === false)
+        if (
+            !this.#options.showClockMeta ||
+            this.#options.showClockMeta === false
+        )
             return;
 
         const metaTypes = ['day', 'month', 'year'];
-        const metaTarget = this.target.querySelector('.clock-meta-container');
+        const metaTarget = this.#target.querySelector('.clock-meta-container');
         const digitsMarkup = markup.digitMarkup();
 
         metaTypes.forEach((item) => {
@@ -235,8 +245,11 @@ class ClockView extends ClockClassTemplate {
         });
     }
 
+    /**
+     * Initializes the clock view by setting up the basic markup structure.
+     */
     init() {
-        const target = this.target;
+        const target = this.#target;
         const initMarkup = markup.initMarkup();
         const digitMarkup = markup.digitMarkup();
         const settingsButtonMarkup = markup.settingsButtonMarkup();
@@ -273,19 +286,38 @@ class ClockView extends ClockClassTemplate {
 
         targetAntePost.insertAdjacentHTML('beforeend', settingsButtonMarkup);
     }
+    /**
+     * Starts the clock with the given options.
+     * @param {Object} [options=this.defaultOptions] - The options to start the clock with.
+     * @param {string} options.target - The target element to render the clock in.
+     * @param {string} options.activeColor - The color to use for the active segment.
+     * @param {string} options.inactiveColor - The color to use for the inactive segments.
+     * @param {boolean} options.showClockMeta - Whether or not to show the clock meta (day, month, year).
+     * @param {boolean} options.showHour12 - Whether or not to show the am/pm indicator.
+     * @param {boolean} options.showWeather - Whether or not to show the weather.
+     * @param {string} options.zipcode - The zipcode to use for weather data.
+     * @param {string} options.apiKey - The API key to use for weather data.
+     */
     start(options = this.defaultOptions) {
         // the call order matters here
         this.setOptions(options);
-        this.#setTarget(this.options);
+        this.#setTarget(this.#options);
         this.init();
-        this.#setClockColors(this.options);
+        this.#setClockColors(this.#options);
         this.#updateTime();
         this.timeInterval = setInterval(() => this.#updateTime(), 1000);
     }
 
+    /**
+     * Stops the clock by clearing the time interval.
+     */
     stop() {
-        clearInterval(this.timeInterval);
+        clearInterval(this.#timeInterval);
     }
+
+    /**
+     * Rerenders the clock view after options have been updated.
+     */
     rerenderUpdatedOptions() {
         this.#setClockColors();
 
