@@ -1,4 +1,11 @@
+/**
+ * A class to generate various markup for the application.
+ */
 class Markup {
+  /**
+   * Generates the initial markup for the clock.
+   * @returns {string} The HTML string for the clock's initial structure.
+   */
   initMarkup() {
     return `
         <div class="am-pm">
@@ -25,6 +32,11 @@ class Markup {
     `;
   }
 
+  /**
+   * Generates markup for clock meta information (day, month, year).
+   * @param {string} metaType - The type of meta information ('day', 'month', or 'year').
+   * @returns {string} The HTML string for the clock meta section.
+   */
   clockMetaMarkup(metaType) {
     return `
           <section class="svg ${metaType}">
@@ -34,6 +46,10 @@ class Markup {
         `;
   }
 
+  /**
+   * Generates markup for AM/PM indicators.
+   * @returns {string} The HTML string for AM/PM SVGs.
+   */
   antePostMarkup() {
     return `
         <div class="svg ante-post-svgs">
@@ -67,6 +83,10 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
     `;
   }
 
+  /**
+   * Generates markup for individual digits.
+   * @returns {string} The HTML string for digit SVGs.
+   */
   digitMarkup() {
     return `
       <svg
@@ -155,6 +175,10 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
       `;
   }
 
+  /**
+   * Generates markup for a loading spinner.
+   * @returns {string} The HTML string for the loading spinner.
+   */
   loadingSpinnerMarkup() {
     return `
     <div class="lds-ring">
@@ -166,6 +190,10 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
     `;
   }
 
+  /**
+   * Generates markup for the settings button.
+   * @returns {string} The HTML string for the settings button.
+   */
   settingsButtonMarkup() {
     return `
       <div class="modal-trigger">
@@ -177,6 +205,12 @@ L32.2,39.7C31.6,39.6,30.9,39.6,30.3,39.5z M36.1,39.4L47.2,16c0.3,0.7,0.6,1.4,0.9
         `;
   }
 
+  /**
+   * Generates markup for the weather display.
+   * @param {Object} data - The weather data object.
+   * @param {Object} iconData - The icon data object.
+   * @returns {string} The HTML string for the weather display.
+   */
   weatherMarkup(data, iconData) {
     return `
   <div class="weather svg">
