@@ -1,9 +1,11 @@
 import { AnimateTransition } from './Animation';
 
-export function modalHandler() {
-    const modalContainer = document.querySelector('.modal-container');
+class ModalHandler {
+    constructor() {
+        this.modalContainer = document.querySelector('.modal-container');
+    }
 
-    function setModalState(target, state, delayLength = 0) {
+    setModalState(target, state, delayLength = 0) {
         if (typeof state !== 'undefined') {
             setTimeout(() => {
                 target.classList.toggle('active', state);
@@ -11,15 +13,16 @@ export function modalHandler() {
             }, delayLength);
         }
     }
-    function openModal(e) {
+
+    openModal(e) {
         if (!e) return;
 
         const animate = new AnimateTransition('.column, .settings');
         animate.startAnimation();
-        setModalState(modalContainer, true);
+        this.setModalState(this.modalContainer, true);
     }
 
-    function closeModal(e) {
+    closeModal(e) {
         if (!e) return;
 
         const animate = new AnimateTransition(
@@ -27,27 +30,38 @@ export function modalHandler() {
             'slideOut'
         );
         const delayLength = animate.startAnimation();
-        setModalState(modalContainer, false, delayLength);
+        this.setModalState(this.modalContainer, false, delayLength);
     }
 
-    document.addEventListener('click', (e) => {
+    handleClicks(e) {
         const target = e.target;
 
         if (target.closest('.modal-button')) {
-            openModal(target);
+            this.openModal(target);
         }
 
         if (
             target.classList.contains('close-button') ||
             target.classList.contains('modal-container')
         ) {
-            closeModal(target);
+            this.closeModal(target);
         }
-    });
+    }
 
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalContainer.classList.contains('active')) {
-            closeModal(e);
+    handleEscPress(e) {
+        if (
+            e.key === 'Escape' &&
+            this.modalContainer.classList.contains('active')
+        ) {
+            this.closeModal(e);
         }
-    });
+    }
+
+    start() {
+        document.addEventListener('click', (e) => this.handleClicks(e));
+
+        document.addEventListener('keydown', (e) => this.handleEscPress(e));
+    }
 }
+
+export default new ModalHandler();
