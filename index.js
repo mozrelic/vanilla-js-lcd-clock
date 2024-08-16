@@ -5,7 +5,7 @@ import store from 'store';
 import ClockView from './src/js/ClockView';
 import WeatherView from './src/js/WeatherView';
 import FormHandler from './src/js/FormHandler';
-import { modalHandler } from './src/js/helpers/modal';
+import ModalHandler from './src/js/helpers/ModalHandler';
 import { defaultState } from './src/js/settings';
 import { AnimateTransition } from './src/js/helpers/Animation';
 
@@ -30,7 +30,7 @@ WeatherView.start({
     ...localStorageSettings,
 });
 
-modalHandler();
+ModalHandler.start();
 
 const formTarget = document.querySelector('.settings');
 
