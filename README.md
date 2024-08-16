@@ -26,6 +26,7 @@ TODO:
 -   [x] refactor modal to class, and rename module to modalHandler
 -   [x] refactor transition animations into a class with appropriate methods
 -   [ ] add the ability to save, replace, delete and recall specific color settings
+-   [ ] add ability to change page background color
 -   [x] add ability to show/hide weather in settings
 -   [ ] refactor index.js, the goal is to eventually be able to call one class method and pass in a settings object and everything will just work.
 -   [x] add a link to OpenWeather in settings menu, style link appropriately
