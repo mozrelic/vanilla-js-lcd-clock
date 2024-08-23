@@ -9,17 +9,15 @@
     height: 100vh;
     z-index: 99;
     flex-direction: column;
-    background-color: rgba(15, 25, 31, 0.5);
-    backdrop-filter: blur(8px);
     transition: var(--animation-transition);
 
     display: none;
     opacity: 0;
     cursor: pointer;
-    overflow-y: scroll;
+    overflow-y: hidden;
 
     &.active {
-        display: flex;
+        display: block;
         opacity: 1;
     }
 
@@ -29,6 +27,7 @@
         border: none;
         color: var(--active-color);
         cursor: pointer;
+        float: right;
     }
 }
 
@@ -118,12 +117,5 @@
 @media only screen and (max-width: 736px) {
     .modal-container {
         justify-content: flex-start;
-
-        .settings {
-            .columns {
-                gap: 2rem !important;
-                grid-template-columns: 1fr !important;
-            }
-        }
     }
 }
