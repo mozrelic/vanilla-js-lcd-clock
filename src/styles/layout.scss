@@ -72,11 +72,11 @@ main {
 
     section {
         display: grid;
+        width: clamp(3rem, 7vw, 10rem);
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
         grid-template-areas: 'digit1 digit2' 'meta-title meta-title';
         justify-items: center;
-        width: clamp(3rem, 7vw, 10rem);
 
         svg {
             display: block;

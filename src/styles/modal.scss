@@ -1,5 +1,7 @@
 .modal-container {
     display: flex;
+
+    display: none;
     position: absolute;
     top: 0;
     right: 0;
@@ -10,8 +12,6 @@
     z-index: 99;
     flex-direction: column;
     transition: var(--animation-transition);
-
-    display: none;
     opacity: 0;
     cursor: pointer;
     overflow-y: hidden;
@@ -36,13 +36,13 @@
 
     .settings-icon {
         position: absolute;
+        top: 0px;
+        left: 0px;
         z-index: 0;
         fill: var(--active-color) !important;
         max-width: 35px;
         transition: var(--animation-transition);
         opacity: 1;
-        left: 0px;
-        top: 0px;
     }
 
     button {

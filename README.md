@@ -33,4 +33,4 @@ TODO:
 -   [ ] write jsdocs for all the things
 -   [ ] At the moment, weather temperature can only be 2 digits, meaning it cannot display anything over 99 degrees or negative temperatures, need to fix
 -   [ ] Instead of using a class method to update the clock settings and weather settings, look into using Proxy or Reflect to automatically grab changes to settings when the settings object is changed. This will require refactoring how state is handled i.e. a global state object.
--   [ ] Refactor modal to be a drawer instead of a popup so that it lives on the left hand side of the screen. This way, settings don't obscure the clockface or weather.
+-   [x] Refactor modal to be a drawer instead of a popup so that it lives on the left hand side of the screen. This way, settings don't obscure the clockface or weather.
