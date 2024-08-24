@@ -1,6 +1,4 @@
-# vanilla-js-lcd-clock
-
-A simple lcd clock and weather app built in vanilla JS on top of Vite. [Demo available here](https://www.mattoz.com/lcd-clock/).
+## Digital Clock with Weather
 
 !['Screenshot'](https://github.com/mozrelic/vanilla-js-lcd-clock/blob/main/Screenshot.png)
 
@@ -9,7 +7,17 @@ User settings are saved in localStorage.
 
 This is a work in progress.
 
-Clone or download repo.
+This project is a customizable digital clock with optional weather display, built using JavaScript, HTML, SCSS, and Vite.
+
+### Features
+
+-   Digital clock display with customizable colors
+-   Optional 12/24 hour format
+-   Optional display of date (day, month, year)
+-   Optional weather display with customizable location
+-   Responsive design
+
+### Installation
 
 `npm install`
 
@@ -20,6 +28,23 @@ Build:
 `npm run build`
 
 `npm run preview`
+
+### Usage
+
+The clock will start automatically when the page loads. You can customize various settings through the settings panel.
+
+### Clock Settings
+
+-   Active Color: Set the color for active clock segments
+-   Inactive Color: Set the color for inactive clock segments
+-   Show Clock Meta: Toggle display of day, month, and year
+-   Show 12 Hour: Toggle between 12-hour and 24-hour format
+
+### Weather Settings
+
+-   Show Weather: Toggle weather display
+-   Zipcode: Set the location for weather data
+-   API Key: Enter your OpenWeatherMap API key
 
 TODO:
 
